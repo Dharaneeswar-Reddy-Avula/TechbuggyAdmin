@@ -7,7 +7,7 @@ export const adminLogin = createAsyncThunk(
   "auth/adminlogin",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      await axios.post("http://localhost:8009/api/admin/login", {
+      await axios.post("https://backteg.onrender.com/api/admin/login", {
         email,
         password,
       });
@@ -25,7 +25,7 @@ export const verifyOtp = createAsyncThunk(
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8009/api/admin/verifyOtp",
+        "https://backteg.onrender.com/api/admin/verifyOtp",
         { email, otp }
       );
       toast.success("Login Successful!");
@@ -46,7 +46,7 @@ export const adminRegister = createAsyncThunk(
     try {
       const token = getState().auth.token;
       await axios.post(
-        "http://localhost:8009/api/admin/register",
+        "https://backteg.onrender.com/api/admin/register",
         { name, email, password, role },
         {
           headers: {
