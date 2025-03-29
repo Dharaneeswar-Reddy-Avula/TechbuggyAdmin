@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { FaUsers } from "react-icons/fa";
 import { RiAlertFill } from "react-icons/ri";
 import logo from "../assets/logo.png";
+import { FaPlus } from "react-icons/fa";
 
 import {
   MdSpaceDashboard,
@@ -177,6 +178,10 @@ const Layout = ({ children }) => {
                 <span className="hidden md:block text-gray-700">
                   {user?.username}
                 </span> */}
+                <div className="bg-[#2664eb] flex justify-center items-center px-2 py-1 gap-2 text-white rounded-md">
+                <FaPlus />
+  ADD ADMIN
+                </div>
               </button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
