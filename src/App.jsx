@@ -14,14 +14,16 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path='dashboard' element={<Dashboard />} />
-        <Route path="quizes" element={<Quizes />} />
+        <Route path="quizes" element={<Quizes/>} />
         <Route path="plans" element={<Plans />} />
         <Route path="users" element={<Users />} />
         <Route path="complaint" element={<Complaints />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="Subscription" element={<Subscription />} /> 
       </Route>
+      
     </Routes>
+    
     </Router>
   );
 };

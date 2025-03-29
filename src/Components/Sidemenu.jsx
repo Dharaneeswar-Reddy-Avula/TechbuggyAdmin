@@ -7,7 +7,7 @@ const SideMenu = ({ setActiveComponent, setIsSideMenuVisible,isVisible, toggleSi
   const navigate=useNavigate();
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', component: 'DASHBOARD' },
-    { id: 'quizes', label: 'Quizes', component: 'QUIZES' }, // Adjusted for consistency
+    { id: 'quizes', label: 'Hello', component: 'QUIZES' }, // Adjusted for consistency
     { id: 'plans', label: 'Plans', component: 'PLANS' },
     { id: 'notifications', label: 'Notifications', component: 'NOTIFICATIONS' },
     { id: 'logout', label: 'Logout', component: 'DASHBOARD' },
