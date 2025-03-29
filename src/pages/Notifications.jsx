@@ -190,12 +190,12 @@ const Notifications = () => {
               {notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className="border border-gray-200 rounded-md p-2 md:p-4 hover:shadow-md transition duration-200"
+                  className="border border-gray-200 rounded-md p-2 md:p-2 hover:shadow-md transition duration-200"
                 >
                   <div className="flex flex-col md:flex-row justify-between items-center cursor-pointer">
-                    <div className="flex gap-4 items-center">
+                    <div className="grid grid-cols-3 gap-4 items-center">
                       <h3 className="text-lg font-medium text-gray-900">{notification.title}</h3>
-                      <p className="mt-1 text-gray-600 truncate">{notification.description}</p>
+                      <p className=" text-gray-600 truncate">{notification.description}</p>
                       {notification.link && (
                         <Link
                           to={notification.link}

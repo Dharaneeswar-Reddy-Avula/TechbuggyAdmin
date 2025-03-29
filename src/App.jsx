@@ -10,9 +10,15 @@ import Users from './pages/Users';
 import Complaints from './pages/Complaints';
 import Subscription from './pages/Subscription';
 import AdminLogin from './pages/loginPage/Login';
+import AdminRegister from './pages/registerPage/Register';
 const App = () => {
   return (
     <Router>
+      <Routes>
+        <Route path='/login' element={<AdminLogin/>}/>
+        <Route path='/register' element={<AdminRegister/>}/>
+
+      </Routes>
       <Layout>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
