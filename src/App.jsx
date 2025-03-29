@@ -10,15 +10,15 @@ import Users from './pages/Users';
 import Complaints from './pages/Complaints';
 import Subscription from './pages/Subscription';
 import AdminLogin from './pages/loginPage/Login';
-import AdminRegister from './pages/registerPage/Register';
+import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/login' element={<AdminLogin/>}/>
-        <Route path='/register' element={<AdminRegister/>}/>
+        <Route path='/' element={<AdminLogin/>}/>
 
       </Routes>
+      <ProtectedRoute>
       <Layout>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -30,6 +30,7 @@ const App = () => {
           <Route path="/subscription" element={<Subscription />} />
         </Routes>
       </Layout>
+      </ProtectedRoute>
     </Router>
   );
 };

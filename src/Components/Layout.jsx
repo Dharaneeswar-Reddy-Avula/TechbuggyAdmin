@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
-// import { signOut } from "../../store/authSlice";
+import { ToastContainer } from "react-toastify";
 import { toast } from "react-hot-toast";
 import { FaUsers } from "react-icons/fa";
 import { RiAlertFill } from "react-icons/ri";
 import logo from "../assets/logo.png";
 import { FaPlus } from "react-icons/fa";
-
+import AdminRegister from "../pages/registerPage/Register";
+import { logout } from "../store/authSlice";
 import {
   MdSpaceDashboard,
   MdNotificationsActive,
@@ -19,11 +19,12 @@ import {
 import { LuNotebookPen } from "react-icons/lu";
 import { FaPersonBreastfeeding } from "react-icons/fa6";
 import { IoAlertCircle } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 
 const Breadcrumb = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
-
+  
   return (
     <nav className="breadcrumb mt-4 mb-6">
       <ul className="flex items-center text-sm text-gray-500 space-x-2">
@@ -55,20 +56,19 @@ const Breadcrumb = () => {
 };
 
 const Layout = ({ children }) => {
-  // const dispatch = useDispatch();
-  // const user = useSelector((state) => state.auth.user?.admin);
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const admin=useSelector((state)=>state.auth)
 
   const sidebarItems = [
     { label: "Dashboard", path: "dashboard", icon: MdSpaceDashboard },
     { label: "Notifications", path: "notifications", icon: RiAlertFill },
-    // ...(user.role === "HOD"
-    //   ? [{ label: "Admins", path: "admin", icon: MdAdminPanelSettings }]
-    //   : []),
+   
     { label: "Users", path: "users", icon: FaUsers },
     { label: "Quizes", path: "quizes", icon: IoAlertCircle },
 
@@ -79,7 +79,7 @@ const Layout = ({ children }) => {
   const isActive = (path) => location.pathname.includes(path);
 
   const handleLogout = () => {
-    dispatch(signOut());
+    dispatch(logout());
     toast.success("Logout successful");
     navigate("/");
   };
@@ -113,6 +113,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
+      <div><ToastContainer position="top-center"/></div>
       {/* Sidebar */}
       <aside
         className={`${
@@ -146,7 +147,7 @@ const Layout = ({ children }) => {
           <div className="p-4 border-t">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-600 rounded-lg transition-colors duration-200"
+              className="w-full flex items-center justify-center px-4 py-2 text-red-700 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors duration-200"
             >
               <MdLogout className="w-5 h-5 mr-2" />
               Logout
@@ -166,28 +167,33 @@ const Layout = ({ children }) => {
             >
               <MdMenu className="w-6 h-6" />
             </button>
-
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-[#2664eb] mx-6 flex justify-center items-center px-2 py-1 gap-2 text-white rounded-md"
+              >
+                <FaPlus />
+                ADD ADMIN
+              </button>
             <div className="relative " ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-2 focus:outline-none"
+                className="flex items-center  rounded-md space-x-2 focus:outline-none"
               >
-                {/* <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                  {user?.username?.charAt(0) || "U"}
+                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                  {admin.admin?.charAt(0) || "U"}
                 </div>
-                <span className="hidden md:block text-gray-700">
-                  {user?.username}
-                </span> */}
-                <div className="bg-[#2664eb] flex justify-center items-center px-2 py-1 gap-2 text-white rounded-md">
-                <FaPlus />
-  ADD ADMIN
-                </div>
-              </button>
+               
+
+                
+                </button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                   <div className="h-px bg-gray-200 my-1" />
+                   <div className=" w-full px-4 py-2 text-left text-gray-700 hover:bg-blue-50">
+                  {admin.admin} 
+                </div> 
                   <button
-                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-blue-50 flex items-center"
+                    className="w-full px-4 py-2 text-left text-red-700 hover:bg-red-50 flex items-center"
                     onClick={() => {
                       handleLogout();
                       setIsDropdownOpen(false);
@@ -197,8 +203,11 @@ const Layout = ({ children }) => {
                     Logout
                   </button>
                 </div>
-              )}
+              )} 
+
+              
             </div>
+           
           </div>
         </header>
 
@@ -209,8 +218,9 @@ const Layout = ({ children }) => {
             {children}
           </div>
         </main>
-      </div>
 
+      </div>
+       
       {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
         <div
@@ -218,6 +228,13 @@ const Layout = ({ children }) => {
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
+
+      {/* Modal - Only renders when isModalOpen is true */}
+      <AdminRegister
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                />
+              
     </div>
   );
 };
