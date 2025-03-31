@@ -12,14 +12,16 @@ import Subscription from './pages/Subscription';
 import AdminLogin from './pages/loginPage/Login';
 import AdminRegister from './pages/registerPage/Register';
 import Page404 from './Components/Page404';
+import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/login' element={<AdminLogin/>}/>
+        <Route path='/' element={<AdminLogin/>}/>
         <Route path='/register' element={<AdminRegister/>}/>
-        <Route path='*' element={<Page404/>}/>
+
       </Routes>
+      <ProtectedRoute>
       <Layout>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -33,6 +35,8 @@ const App = () => {
 
         </Routes>
       </Layout>
+      
+      </ProtectedRoute>
     </Router>
   );
 };
