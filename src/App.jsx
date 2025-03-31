@@ -10,12 +10,15 @@ import Users from './pages/Users';
 import Complaints from './pages/Complaints';
 import Subscription from './pages/Subscription';
 import AdminLogin from './pages/loginPage/Login';
+import AdminRegister from './pages/registerPage/Register';
+import Page404 from './Components/Page404';
 import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path='/' element={<AdminLogin/>}/>
+        <Route path='/register' element={<AdminRegister/>}/>
 
       </Routes>
       <ProtectedRoute>
@@ -28,8 +31,11 @@ const App = () => {
           <Route path="/complaint" element={<Complaints />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/subscription" element={<Subscription />} />
+          <Route path='*' element={<Page404/>}/>
+
         </Routes>
       </Layout>
+      
       </ProtectedRoute>
     </Router>
   );
