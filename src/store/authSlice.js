@@ -54,6 +54,7 @@ export const adminRegister = createAsyncThunk(
           },
         }
       );
+      
       toast.success("Admin registered successfully.");
     } catch (err) {
       
@@ -65,10 +66,38 @@ export const adminRegister = createAsyncThunk(
   }
 );
 
+export const currentAdmin = createAsyncThunk(
+  "auth/currentAdmin",
+  async (_, { rejectWithValue ,getState}) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.post(
+        "https://backteg.onrender.com/api/admin/currentAdmin",
+        {},
+       
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
+      return response.data.currentAdmin;
+    } catch (err) {
+      
+      
+      return rejectWithValue(
+        err.response?.data?.message || "Error in fetching admin details."
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     admin: "",
+    _id:"",
     email: "",
     role: "",
     token: null,
@@ -78,6 +107,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       (state.admin = null),
+      (state._id=null),
         (state.email = null),
         (state.role = null),
         (state.token = null),
@@ -102,9 +132,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyOtp.fulfilled, (state, action) => {
         state.loading = false;
-        state.admin = action.payload.admin.name;
-        state.email = action.payload.admin.email;
-        state.role = action.payload.admin.role;
+        state._id = action.payload.id;
         state.token = action.payload.token;
         state.error = null;
       })
@@ -127,7 +155,23 @@ const authSlice = createSlice({
       .addCase(adminRegister.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(currentAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.admin=action.payload.name;
+        state.email=action.payload.email;
+        state.name=action.payload.name;
+        state.role=action.payload.role;
+      })
+      .addCase(currentAdmin.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(currentAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 export const { logout } = authSlice.actions;

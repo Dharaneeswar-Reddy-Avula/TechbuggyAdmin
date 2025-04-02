@@ -1,5 +1,8 @@
 // App.jsx
 import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentAdmin } from './store/authSlice';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -14,6 +17,14 @@ import AdminRegister from './pages/registerPage/Register';
 import Page404 from './Components/Page404';
 import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 const App = () => {
+  const token=useSelector((state)=>state.auth.token)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    if(token){
+      dispatch(currentAdmin())
+    }
+
+  },[token])
   return (
     <Router>
       <Routes>

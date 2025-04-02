@@ -4,7 +4,7 @@ import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { adminLogin, verifyOtp } from "../../store/authSlice";
+import { adminLogin, verifyOtp,currentAdmin } from "../../store/authSlice";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +17,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   
   const { loading, error, token } = useSelector((state) => state.auth);
+  const [sendLoading,setSendLoading]=useState(false);
 
   useEffect(() => {
     if (token) {
@@ -42,11 +43,15 @@ const AdminLogin = () => {
   };
   
   const handleSubmit = async (e) => {
+    setSendLoading(true);
     e.preventDefault();
     dispatch(adminLogin({ email, password }))
       .unwrap()
       .then(() => setOtpModal(true))
       .catch(() => {});
+    setSendLoading(false)
+    
+      
   };
 
   
@@ -56,6 +61,7 @@ const AdminLogin = () => {
       .unwrap()
       .then(() => {
         setOtpModal(false);
+        
       })
       .catch(() => {});
   };
@@ -157,7 +163,7 @@ const AdminLogin = () => {
             className="text-blue-500 dark:text-blue-400 hover:underline"
           >
            
-            {loading ? (
+            {sendLoading ? (
               <span className="flex items-center justify-center">
                 <FaSpinner className="animate-spin" size={15} />
                 Sending...
