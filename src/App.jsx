@@ -1,5 +1,8 @@
 // App.jsx
 import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentAdmin } from './store/authSlice';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -9,26 +12,97 @@ import Notifications from './pages/Notifications';
 import Users from './pages/Users';
 import Complaints from './pages/Complaints';
 import Subscription from './pages/Subscription';
-import CreateQuiz from './pages/CreateQuiz';
-import Addquestion from './pages/Addquestion';
+import AdminLogin from './pages/loginPage/Login';
+import AdminRegister from './pages/registerPage/Register';
+import Page404 from './Components/Page404';
+import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 const App = () => {
+  const token=useSelector((state)=>state.auth.token)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    if(token){
+      dispatch(currentAdmin())
+    }
+
+  },[token])
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/quizes" element={<Quizes />} />
-          <Route path="/plans" element={<Plans />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/complaint" element={<Complaints />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="/createquiz" element={<CreateQuiz/>} />
-          <Route path="/addquestion/:quizId" element={<Addquestion />} />
-
-        </Routes>
-      </Layout>
-    </Router>
+    <Routes>
+      <Route path="/" element={<AdminLogin />} />
+      <Route path="/register" element={<AdminRegister />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/quizes"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Quizes />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/plans"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Plans />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Users />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/complaint"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Complaints />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Notifications />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/subscription"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Subscription />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
+  </Router>
   );
 };
 
