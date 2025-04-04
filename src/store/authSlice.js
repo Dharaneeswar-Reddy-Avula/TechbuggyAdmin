@@ -20,6 +20,7 @@ export const adminLogin = createAsyncThunk(
 );
 
 //verify otp
+// https://backteg.onrender.com
 export const verifyOtp = createAsyncThunk(
   "auth/verifyotp",
   async ({ email, otp }, { rejectWithValue }) => {
@@ -61,6 +62,22 @@ export const adminRegister = createAsyncThunk(
       toast.error(err.response?.data?.message || "Something went wrong");
       return rejectWithValue(
         err.response?.data?.message || "Error in Registering the Admin."
+      );
+    }
+  }
+);
+
+export const mailToNewAdmin = createAsyncThunk(
+  "auth/mailToNewAdmin",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+       await axios.post(
+        "https://backteg.onrender.com/api/admin/mailToNewAdmin",
+        { email, password }
+      );
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Error in sending mail to newly registered admin."
       );
     }
   }
@@ -169,6 +186,18 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(currentAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(mailToNewAdmin.fulfilled, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(mailToNewAdmin.pending, (state, action) => { 
+        state.loading = true; 
+        state.error = null;
+      })
+      .addCase(mailToNewAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
