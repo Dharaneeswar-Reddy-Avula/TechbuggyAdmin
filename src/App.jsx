@@ -27,28 +27,82 @@ const App = () => {
   },[token])
   return (
     <Router>
-      <Routes>
-        <Route path='/' element={<AdminLogin/>}/>
-        <Route path='/register' element={<AdminRegister/>}/>
-
-      </Routes>
-      <ProtectedRoute>
-      <Layout>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/quizes" element={<Quizes />} />
-          <Route path="/plans" element={<Plans />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/complaint" element={<Complaints />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path='*' element={<Page404/>}/>
-
-        </Routes>
-      </Layout>
-      
-      </ProtectedRoute>
-    </Router>
+    <Routes>
+      <Route path="/" element={<AdminLogin />} />
+      <Route path="/register" element={<AdminRegister />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/quizes"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Quizes />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/plans"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Plans />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Users />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/complaint"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Complaints />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Notifications />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/subscription"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Subscription />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
+  </Router>
   );
 };
 
