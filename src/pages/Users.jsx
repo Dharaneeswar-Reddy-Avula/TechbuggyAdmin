@@ -13,7 +13,7 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${API_URL}/User/`);
+      const { data } = await axios.get(`${API_URL}/User/users`);
       setUsers(data.data);
       setError(null);
     } catch (error) {
