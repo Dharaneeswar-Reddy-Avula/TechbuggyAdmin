@@ -16,6 +16,8 @@ import AdminLogin from './pages/loginPage/Login';
 import AdminRegister from './pages/registerPage/Register';
 import Page404 from './Components/Page404';
 import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
+import CreateQuiz from './pages/CreateQuiz';
+import Addquestion from './pages/Addquestion';
 const App = () => {
   const token=useSelector((state)=>state.auth.token)
   const dispatch=useDispatch()
@@ -27,82 +29,30 @@ const App = () => {
   },[token])
   return (
     <Router>
-    <Routes>
-      <Route path="/" element={<AdminLogin />} />
-      <Route path="/register" element={<AdminRegister />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Dashboard />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/quizes"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Quizes />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/plans"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Plans />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Users />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/complaint"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Complaints />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Notifications />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/subscription"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Subscription />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<Page404 />} />
-    </Routes>
-  </Router>
+      <Routes>
+        <Route path='/' element={<AdminLogin/>}/>
+        <Route path='/register' element={<AdminRegister/>}/>
+
+      </Routes>
+      <ProtectedRoute>
+      <Layout>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/quizes" element={<Quizes />} />
+          <Route path="/plans" element={<Plans />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/complaint" element={<Complaints />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/subscription" element={<Subscription />} />
+          <Route path='/createquiz' element={<CreateQuiz/>} />
+          <Route path='*' element={<Page404/>}/>
+          <Route path="/addquestion/:quizId" element={<Addquestion/>} />
+
+        </Routes>
+      </Layout>
+      
+      </ProtectedRoute>
+    </Router>
   );
 };
 
