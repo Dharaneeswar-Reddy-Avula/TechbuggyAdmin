@@ -41,27 +41,53 @@ export const verifyOtp = createAsyncThunk(
   }
 );
 
-export const adminRegister = createAsyncThunk(
-  "auth/register",
-  async ({ name, email, password, role }, { rejectWithValue ,getState}) => {
+// Request OTP for registration
+export const requestAdminOtp = createAsyncThunk(
+  "auth/requestAdminOtp",
+  async ({ email }, { rejectWithValue,getState }) => {
     try {
       const token = getState().auth.token;
       await axios.post(
-        "https://backteg.onrender.com/api/admin/register",
-        { name, email, password, role },
+        "https://backteg.onrender.com/api/admin/register/request-otp",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          email,
+        },{
+          headers:{
+            Authorization:`Bearer ${token}`,
+          }
         }
       );
-      
-      toast.success("Admin registered successfully.");
+      toast.success("OTP sent to the requested email for verification.");
     } catch (err) {
-      
-      toast.error(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Failed to send OTP.");
       return rejectWithValue(
-        err.response?.data?.message || "Error in Registering the Admin."
+        err.response?.data?.message || "OTP request failed"
+      );
+    }
+  }
+);
+
+// Verify OTP and register the admin
+export const verifyRegisterOtp = createAsyncThunk(
+  "auth/verifyRegisterOtp",
+  async ({ name, email, password, role, otp }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "https://backteg.onrender.com/api/admin/register/verify-otp",
+        {
+          name,
+          email,
+          password,
+          role,
+          otp,
+        }
+      );
+      toast.success("Admin registered successfully.");
+      return response.data;
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Registration failed.");
+      return rejectWithValue(
+        err.response?.data?.message || "OTP verification failed"
       );
     }
   }
@@ -71,13 +97,14 @@ export const mailToNewAdmin = createAsyncThunk(
   "auth/mailToNewAdmin",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-       await axios.post(
+      await axios.post(
         "https://backteg.onrender.com/api/admin/mailToNewAdmin",
         { email, password }
       );
     } catch (err) {
       return rejectWithValue(
-        err.response?.data?.message || "Error in sending mail to newly registered admin."
+        err.response?.data?.message ||
+          "Error in sending mail to newly registered admin."
       );
     }
   }
@@ -85,24 +112,22 @@ export const mailToNewAdmin = createAsyncThunk(
 
 export const currentAdmin = createAsyncThunk(
   "auth/currentAdmin",
-  async (_, { rejectWithValue ,getState}) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
       const token = getState().auth.token;
       const response = await axios.post(
         "https://backteg.onrender.com/api/admin/currentAdmin",
         {},
-       
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      
+
       return response.data.currentAdmin;
     } catch (err) {
-      
-      
       return rejectWithValue(
         err.response?.data?.message || "Error in fetching admin details."
       );
@@ -114,93 +139,120 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     admin: "",
-    _id:"",
+    _id: "",
     email: "",
     role: "",
     token: null,
     loading: false,
+    loginLoading: false,
+    registerOtpLoading: false,
+    registerOtpError: null,
+    verifyRegisterOtpLoading: false,
+    verifyRegisterOtpError: null,
+    otpLoading: false,
     error: null,
+    loginError: null,
+    otpError: null,
+    currentAdminError: null,
+    mailError: null,
   },
   reducers: {
     logout: (state) => {
       (state.admin = null),
-      (state._id=null),
+        (state._id = null),
         (state.email = null),
         (state.role = null),
         (state.token = null),
-        (state.error=null),
-        (state.loading=false),
+        (state.error = null),
+        (state.loading = false),
         localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(adminLogin.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loginLoading = true;
+        state.loginError = null;
+        
       })
       .addCase(adminLogin.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
+        state.loginLoading = false;
+        state.loginError = null;
       })
       .addCase(adminLogin.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.loginLoading = false;
+        state.loginError = action.payload;
       })
       .addCase(verifyOtp.fulfilled, (state, action) => {
-        state.loading = false;
+        state.otpLoading = false;
         state._id = action.payload.id;
         state.token = action.payload.token;
-        state.error = null;
+        state.otpError = null;
       })
       .addCase(verifyOtp.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.otpLoading = true;
+        state.otpError = null;
       })
       .addCase(verifyOtp.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.otpLoading = false;
+        state.otpError = action.payload;
       })
-      .addCase(adminRegister.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
+      // Request OTP for registration
+      .addCase(requestAdminOtp.pending, (state) => {
+        state.registerOtpLoading = true;
+        state.registerOtpError = null;
       })
-      .addCase(adminRegister.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(requestAdminOtp.fulfilled, (state) => {
+        state.registerOtpLoading = false;
+        state.registerOtpError = null;
       })
-      .addCase(adminRegister.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+      .addCase(requestAdminOtp.rejected, (state, action) => {
+        state.registerOtpLoading = false;
+        state.registerOtpError = action.payload;
       })
+
+      // Verify OTP and complete registration
+      .addCase(verifyRegisterOtp.pending, (state) => {
+        state.verifyRegisterOtpLoading = true;
+        state.verifyRegisterOtpError = null;
+      })
+      .addCase(verifyRegisterOtp.fulfilled, (state) => {
+        state.verifyRegisterOtpLoading = false;
+        state.verifyRegisterOtpError = null;
+      })
+      .addCase(verifyRegisterOtp.rejected, (state, action) => {
+        state.verifyRegisterOtpLoading = false;
+        state.verifyRegisterOtpError = action.payload;
+      })
+
       .addCase(currentAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
-        state.admin=action.payload.name;
-        state.email=action.payload.email;
-        state.name=action.payload.name;
-        state.role=action.payload.role;
+        state.currentAdminError = null;
+        state.admin = action.payload.name;
+        state.email = action.payload.email;
+        state.name = action.payload.name;
+        state.role = action.payload.role;
       })
       .addCase(currentAdmin.pending, (state, action) => {
         state.loading = true;
-        state.error = null;
+        state.currentAdminError = null;
       })
       .addCase(currentAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.currentAdminError = action.payload;
       })
       .addCase(mailToNewAdmin.fulfilled, (state, action) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = false;
+        state.mailError = null;
       })
-      .addCase(mailToNewAdmin.pending, (state, action) => { 
-        state.loading = true; 
-        state.error = null;
+      .addCase(mailToNewAdmin.pending, (state, action) => {
+        state.loading = true;
+        state.mailError = null;
       })
       .addCase(mailToNewAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-      })
+        state.mailError = action.payload;
+      });
   },
 });
 export const { logout } = authSlice.actions;

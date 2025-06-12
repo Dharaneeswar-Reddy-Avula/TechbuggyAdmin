@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { loading, error, token } = useSelector((state) => state.auth);
+  const { loginLoading, loginError, token } = useSelector((state) => state.auth);
   const [sendLoading,setSendLoading]=useState(false);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const AdminLogin = () => {
       <div><ToastContainer position="top-center"/></div>
       <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-md">
         <h2 className="text-2xl font-semibold text-center mb-6">Admin Login</h2>
-        {error && <p className="text-red-600 text-center">{error}</p>}
+        {loginError && <p className="text-red-600 text-center">{loginError}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
@@ -107,9 +107,9 @@ const AdminLogin = () => {
           <button 
             type="submit"
             className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50" 
-            disabled={loading}
+            disabled={loginLoading}
           >
-            {loading ? (
+            {loginLoading ? (
               <span className="flex items-center gap-2">
                 <FaSpinner className="animate-spin" size={20} />
                 Logging in...
