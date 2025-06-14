@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState ,useRef} from "react";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
-import { adminRegister,mailToNewAdmin } from "../../store/authSlice";
+import {
+  requestAdminOtp,
+  verifyRegisterOtp,
+  mailToNewAdmin,
+} from "../../store/authSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 const AdminRegister = ({ isOpen, onClose }) => {
@@ -11,9 +15,18 @@ const AdminRegister = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [otpModal, setOtpModal] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef([]);
+  const [loading,setLoading] = useState(false)
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const {
+    registerOtpLoading,
+    registerOtpError,
+    verifyRegisterOtpLoading,
+    verifyRegisterOtpError,
+  } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isOpen) {
@@ -27,11 +40,40 @@ const AdminRegister = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(adminRegister({ name, email, password, role }))
+    setLoading(true);
+    dispatch(requestAdminOtp({ email }))
       .unwrap()
       .then(() => {
+        
+        setOtpModal(true)})
+      .catch(() => {});
+      setLoading(false);
+  };
+
+  const handleChange = (index, value) => {
+    if (!/\d/.test(value) && value !== "") return; // Allow only digits
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerifyOtp = async (otp) => {
+    dispatch(verifyRegisterOtp({ name, email, password, role, otp }))
+      .unwrap()
+      .then(() => {
+        setOtpModal(false);
         onClose();
-        dispatch(mailToNewAdmin({email,password}));
+        dispatch(mailToNewAdmin({ email, password }));
       })
       .catch(() => {});
   };
@@ -47,7 +89,9 @@ const AdminRegister = ({ isOpen, onClose }) => {
         <h2 className="text-2xl font-semibold text-center mb-4">
           Admin Register
         </h2>
-        {error && <p className="text-red-600 text-center mb-2">{error}</p>}
+        {registerOtpError && (
+          <p className="text-red-600 text-center mb-2">{registerOtpError}</p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -113,9 +157,9 @@ const AdminRegister = ({ isOpen, onClose }) => {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
-              disabled={loading}
+              disabled={registerOtpLoading}
             >
-              {loading ? (
+              {registerOtpLoading ? (
                 <span className="flex items-center gap-2">
                   <FaSpinner className="animate-spin" size={20} />
                   Registering...
@@ -127,6 +171,64 @@ const AdminRegister = ({ isOpen, onClose }) => {
           </div>
         </form>
       </div>
+      {otpModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-white p-6 rounded-lg shadow-lg sm:w-96 w-[96vw]">
+            <h2 className="text-xl font-semibold text-center">Enter OTP</h2>
+            <p className="text-gray-500 text-sm text-center mb-4">
+              We've sent an OTP to requested email.
+            </p>
+
+            <div className="flex justify-center gap-2 mb-4">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  className="w-12 h-12 text-center border rounded-lg text-xl focus:ring-2 focus:ring-blue-500"
+                />
+              ))}
+            </div>
+
+            <div className="flex justify-between">
+              <button
+                onClick={() => setOtpModal(false)}
+                className="px-4 py-2 text-gray-600 border rounded-lg hover:bg-gray-200 hover:text-gray-800 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleVerifyOtp(otp.join(""))}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+              >
+                Verify OTP
+              </button>
+            </div>
+            <div className="text-center w-full">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
+                Didn't receive the otp?{" "}
+                <button
+                  onClick={handleSubmit}
+                  className="text-blue-500 dark:text-blue-400 hover:underline"
+                >
+                  {verifyRegisterOtpLoading ? (
+                    <span className="flex items-center justify-center">
+                      <FaSpinner className="animate-spin" size={15} />
+                      Sending...
+                    </span>
+                  ) : (
+                    "Resend"
+                  )}
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
