@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 const Addquestion = () => {
   const { quizId } = useParams();
@@ -21,137 +22,198 @@ const Addquestion = () => {
     setCurrentQuestion({ ...currentQuestion, options: updatedOptions });
   };
 
-  const handleCorrectAnswerChange = (value) => {
-    setCurrentQuestion({ ...currentQuestion, correctAnswer: value });
+  const handleCorrectAnswerChange = (selectedOption) => {
+    setCurrentQuestion((prev) => ({
+      ...prev,
+      correctAnswer: selectedOption,
+    }));
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestion.question.trim()) {
+    if (
+      currentQuestion.question.trim() &&
+      currentQuestion.options.every((opt) => opt.trim() !== "") &&
+      currentQuestion.correctAnswer
+    ) {
       setQuestions([...questions, currentQuestion]);
-      setCurrentQuestion({ question: "", options: ["", "", "", ""], correctAnswer: "" });
+      setCurrentQuestion({
+        question: "",
+        options: ["", "", "", ""],
+        correctAnswer: "",
+      });
+    } else {
+      alert("Please complete the question, all options, and select the correct answer.");
     }
   };
 
   const handleDelete = async (questionIndex) => {
-    console.log(questionIndex)
-    try {
-        const response = await axios.put(
-          `http://localhost:8009/api/tests/deletequestion/${quizId}?deleteIndex=${questionIndex}`
-            
-           
-        );
+    const questionToDelete = questions[questionIndex];
 
-        if (response.status === 200) {
-            // Remove the deleted question from state
-            setQuestions(prevQuestions => prevQuestions.filter((_, index) => index !== questionIndex));
-        }
+    try {
+      await axios.put(
+        `http://localhost:8009/api/tests/deletequestion/${quizId}?deleteIndex=${questionIndex}`
+      );
     } catch (error) {
-        console.error("Error deleting question:", error);
+      console.warn("Backend delete failed (ignored for local delete):", error.message);
     }
-};
+
+    // Always delete locally
+    setQuestions((prev) =>
+      prev.filter((_, index) => index !== questionIndex)
+    );
+  };
 
   const handleEdit = (index) => {
     setCurrentQuestion(questions[index]);
     setQuestions(questions.filter((_, i) => i !== index));
   };
-  const handleSubmit = async () => {
-    console.log("Quiz ID:", quizId);
 
+  const handleSubmit = async () => {
     if (!quizId) {
-        alert("Quiz ID is missing. Cannot submit.");
-        return;
+      alert("Quiz ID is missing. Cannot submit.");
+      return;
     }
 
-    // Ensure the last question is added if valid
     const trimmedOptions = currentQuestion.options.map((opt) => opt.trim());
     const isCurrentQuestionValid =
-        currentQuestion.question.trim() !== "" &&
-        trimmedOptions.every((opt) => opt !== "") &&
-        trimmedOptions.includes(currentQuestion.correctAnswer.trim());
+      currentQuestion.question.trim() !== "" &&
+      trimmedOptions.every((opt) => opt !== "") &&
+      trimmedOptions.includes(currentQuestion.correctAnswer.trim());
 
-    const finalQuestions = isCurrentQuestionValid
-        ? [...questions, currentQuestion]
-        : [...questions];
+    const finalQuestions = [...questions];
+
+    if (isCurrentQuestionValid) {
+      finalQuestions.push({
+        ...currentQuestion,
+        options: trimmedOptions,
+      });
+    }
 
     if (finalQuestions.length === 0) {
-        alert("No valid questions to submit");
-        return;
+      alert("No valid questions to submit.");
+      return;
     }
 
     const payload = { quizId, questions: finalQuestions };
-    
-    console.log("Payload being sent:", JSON.stringify(payload, null, 2)); // Debugging log
 
     try {
-        const response = await fetch(`http://localhost:8009/api/tests/addquestion/${quizId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-            const errorResponse = await response.json();
-            console.error("Server error:", errorResponse);
-            throw new Error(errorResponse.message || "Failed to submit quiz");
+      const response = await fetch(
+        `http://localhost:8009/api/tests/addquestion/${quizId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
         }
+      );
 
-        alert("Quiz submitted successfully!");
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error("Server error:", errorResponse);
+        throw new Error(errorResponse.message || "Failed to submit quiz");
+      }
+
+      alert("Quiz submitted successfully!");
+
+      // Reset state
+      setQuestions([]);
+      setCurrentQuestion({ question: "", options: ["", "", "", ""], correctAnswer: "" });
     } catch (error) {
-        console.error("Error submitting quiz:", error);
+      console.error("Error submitting quiz:", error);
     }
-};
-
-  
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-3xl font-bold mb-6">Add a Question</h2>
-      <div className="bg-gradient-to-r from-blue-500 to-blue-800 text-white p-6 rounded-lg shadow-lg">
+
+      <div className="bg-gradient-to-r from-blue-500 to-blue-800 text-white p-6 rounded-lg shadow-lg mb-6">
         <input
           type="text"
           placeholder="Enter your question"
-          className="p-2 w-full mb-2 rounded-md text-black"
+          className="p-2 w-full mb-4 rounded-md text-black"
           value={currentQuestion.question}
           onChange={(e) => handleQuestionChange(e.target.value)}
         />
-        {currentQuestion.options.map((option, optIndex) => (
-          <input
-            key={optIndex}
-            type="text"
-            placeholder={`Option ${optIndex + 1}`}
-            className="p-2 w-full mb-2 rounded-md text-black"
-            value={option}
-            onChange={(e) => handleOptionChange(optIndex, e.target.value)}
-          />
-        ))}
-        <input
-          type="text"
-          placeholder="Correct Answer"
-          className="p-2 w-full mb-2 rounded-md text-black"
-          value={currentQuestion.correctAnswer}
-          onChange={(e) => handleCorrectAnswerChange(e.target.value)}
-        />
+
+        {currentQuestion.options.map((option, index) => {
+          const isCorrect = currentQuestion.correctAnswer === option;
+          return (
+            <div
+              key={index}
+              className={`relative flex items-center gap-3 mb-3 border-2 rounded-md p-2 ${
+                isCorrect ? "border-green-500 bg-green-50" : "border-transparent"
+              }`}
+            >
+              <input
+                type="text"
+                placeholder={`Option ${index + 1}`}
+                className="flex-grow p-2 rounded-md text-black border border-gray-300"
+                value={option}
+                onChange={(e) => handleOptionChange(index, e.target.value)}
+              />
+              <div
+                className={`w-5 h-5 border-2 rounded-sm cursor-pointer ${
+                  isCorrect ? "bg-green-500 border-green-700" : "border-white"
+                }`}
+                onClick={() => handleCorrectAnswerChange(option)}
+              ></div>
+            </div>
+          );
+        })}
+
+        <div className="flex justify-end gap-4 mt-4">
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded-md"
+            onClick={handleNextQuestion}
+          >
+            Next Question
+          </button>
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded-md"
+            onClick={handleSubmit}
+          >
+            Submit Quiz
+          </button>
+        </div>
       </div>
 
       <div className="mt-6">
         {questions.map((q, qIndex) => (
-          <div key={qIndex} className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg mb-3">
+          <div
+            key={qIndex}
+            className="flex items-start justify-between bg-white shadow-md p-4 rounded-lg mb-3"
+          >
             <div>
               <p className="font-semibold">Q{qIndex + 1}: {q.question}</p>
-              <p className="text-gray-600">Correct Answer: {q.correctAnswer}</p>
+              <ul className="list-disc ml-5 text-gray-600">
+                {q.options.map((opt, i) => (
+                  <li
+                    key={i}
+                    className={`${
+                      opt === q.correctAnswer ? "text-green-600 font-bold" : ""
+                    }`}
+                  >
+                    {opt}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="flex gap-2">
-              <button className="text-blue-500" onClick={() => { console.log("Delete button clicked for index:", qIndex); 
-                handleEdit(qIndex)}}><FaEdit /></button>
-              <button className="text-red-500" onClick={() => handleDelete(qIndex)}><FaTrash /></button>
+            <div className="flex flex-col gap-2">
+              <button
+                className="text-blue-600"
+                onClick={() => handleEdit(qIndex)}
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="text-red-600"
+                onClick={() => handleDelete(qIndex)}
+              >
+                <FaTrash />
+              </button>
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="flex justify-end gap-4 mt-6">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md" onClick={handleNextQuestion}>Next Question</button>
-        <button className="bg-green-600 text-white px-4 py-2 rounded-md" onClick={handleSubmit}>Submit Quiz</button>
       </div>
     </div>
   );
