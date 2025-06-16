@@ -1,5 +1,4 @@
-import { useState ,useRef} from "react";
-import { useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import {
@@ -7,8 +6,8 @@ import {
   verifyRegisterOtp,
   mailToNewAdmin,
 } from "../../store/authSlice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 const AdminRegister = ({ isOpen, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
@@ -18,7 +17,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
   const [otpModal, setOtpModal] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const {
@@ -43,15 +42,13 @@ const AdminRegister = ({ isOpen, onClose }) => {
     setLoading(true);
     dispatch(requestAdminOtp({ email }))
       .unwrap()
-      .then(() => {
-        
-        setOtpModal(true)})
+      .then(() => setOtpModal(true))
       .catch(() => {});
-      setLoading(false);
+    setLoading(false);
   };
 
   const handleChange = (index, value) => {
-    if (!/\d/.test(value) && value !== "") return; // Allow only digits
+    if (!/\d/.test(value) && value !== "") return;
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -81,16 +78,14 @@ const AdminRegister = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex z-50 items-center justify-center bg-gray-800 bg-opacity-50">
-      <div>
-        <ToastContainer position="top-center" />
-      </div>
-      <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md">
+    <div className="fixed inset-0 flex z-50 items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-opacity-80">
+      <ToastContainer position="top-center" />
+      <div className="bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-4">
           Admin Register
         </h2>
         {registerOtpError && (
-          <p className="text-red-600 text-center mb-2">{registerOtpError}</p>
+          <p className="text-red-600 dark:text-red-400 text-center mb-2">{registerOtpError}</p>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -101,7 +96,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             />
           </div>
           <div>
@@ -112,7 +107,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             />
           </div>
           <div>
@@ -124,11 +119,11 @@ const AdminRegister = ({ isOpen, onClose }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -143,7 +138,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
               value={role}
               onChange={(e) => setRole(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             />
           </div>
           <div className="flex justify-end space-x-2">
@@ -171,11 +166,12 @@ const AdminRegister = ({ isOpen, onClose }) => {
           </div>
         </form>
       </div>
+
       {otpModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-white p-6 rounded-lg shadow-lg sm:w-96 w-[96vw]">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg sm:w-96 w-[96vw] text-black dark:text-white">
             <h2 className="text-xl font-semibold text-center">Enter OTP</h2>
-            <p className="text-gray-500 text-sm text-center mb-4">
+            <p className="text-gray-500 dark:text-gray-400 text-sm text-center mb-4">
               We've sent an OTP to requested email.
             </p>
 
@@ -189,7 +185,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   ref={(el) => (inputRefs.current[index] = el)}
-                  className="w-12 h-12 text-center border rounded-lg text-xl focus:ring-2 focus:ring-blue-500"
+                  className="w-12 h-12 text-center border rounded-lg text-xl focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               ))}
             </div>
@@ -197,7 +193,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
             <div className="flex justify-between">
               <button
                 onClick={() => setOtpModal(false)}
-                className="px-4 py-2 text-gray-600 border rounded-lg hover:bg-gray-200 hover:text-gray-800 transition-all"
+                className="px-4 py-2 text-gray-600 border rounded-lg hover:bg-gray-200 hover:text-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white transition-all"
               >
                 Cancel
               </button>
