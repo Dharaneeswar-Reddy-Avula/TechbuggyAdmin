@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLogin, verifyOtp,currentAdmin } from "../../store/authSlice";
-
+import { Link } from 'react-router-dom';
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -95,6 +95,12 @@ const AdminLogin = () => {
                 required
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+               <Link
+            to="/forgotPassword"
+            className="flex justify-center text-blue-600 hover:underline"
+          >
+            Forgot Password?
+          </Link>{" "}
               <button 
                 type="button" 
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500" 

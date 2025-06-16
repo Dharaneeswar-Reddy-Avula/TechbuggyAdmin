@@ -142,96 +142,91 @@ const Notifications = () => {
           </button>
         </div>
 
-        {visible && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100 mt-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  {selectedNotification
-                    ? "Edit Notification"
-                    : "Create New Notification"}
-                </h2>{" "}
-              </h2>
-              <button
-                onClick={() => setVisible(false)}
-                className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition"
-              >
-                <IoCloseSharp className="text-2xl" />
-              </button>
-            </div>
+     {visible && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg relative">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          {selectedNotification ? "Edit Notification" : "Create New Notification"}
+        </h2>
+        <button
+          onClick={() => setVisible(false)}
+          className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition"
+        >
+          <IoCloseSharp className="text-2xl" />
+        </button>
+      </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  placeholder="Important update"
-                  required
-                />
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Title <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            placeholder="Important update"
+            required
+          />
+        </div>
 
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Description <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows="4"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  placeholder="Detailed notification message..."
-                  required
-                />
-              </div>
+        <div>
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            rows="4"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            placeholder="Detailed notification message..."
+            required
+          />
+        </div>
 
-              <div>
-                <label
-                  htmlFor="links"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Links (Optional)
-                </label>
-                <input
-                  type="url"
-                  id="links"
-                  name="links"
-                  value={formData.links}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  placeholder="https://example.com"
-                />
-              </div>
+        <div>
+          <label
+            htmlFor="links"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Links (Optional)
+          </label>
+          <input
+            type="url"
+            id="links"
+            name="links"
+            value={formData.links}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            placeholder="https://example.com"
+          />
+        </div>
 
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-md"
-                >
-                  <h2 className="text-xl font-semibold text-white">
-                    {selectedNotification
-                      ? "Edit Notification"
-                      : "Create New Notification"}
-                  </h2>{" "}
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
+        <div className="pt-2">
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-md"
+          >
+            {selectedNotification ? "Update Notification" : "Create Notification"}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
         <div className=" rounded-xl  overflow-hidden">
           <div className="p-4 border-b border-gray-200">

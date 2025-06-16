@@ -8,6 +8,8 @@ import logo from "../assets/logo.png";
 import { FaPlus } from "react-icons/fa";
 import AdminRegister from "../pages/registerPage/Register";
 import { logout } from "../store/authSlice";
+import { Outlet } from "react-router-dom"; // ✅ import this at the top
+
 import {
   MdSpaceDashboard,
   MdNotificationsActive,
@@ -55,7 +57,7 @@ const Breadcrumb = () => {
   );
 };
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const navigate = useNavigate();
   const dispatch=useDispatch();
   const location = useLocation();
@@ -127,7 +129,7 @@ const Layout = ({ children }) => {
               className="flex text-2xl items-center gap-2 font-bold text-blue-600"
             >
               <img src={logo} className="w-[50px] h-[50px]" />
-              <span class="font">TechBuggy</span>
+              <span className="font">TechBuggy</span>
             </Link>
           </div>
           <nav className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -215,7 +217,7 @@ const Layout = ({ children }) => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <div className="container mx-auto p-4">
             <Breadcrumb />
-            {children}
+             <Outlet /> 
           </div>
         </main>
 
