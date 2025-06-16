@@ -12,7 +12,7 @@ import logo from "../assets/logo.png";
 import AdminRegister from "../pages/registerPage/Register";
 import { logout } from "../store/authSlice";
 import { ThemeToggleButton } from "../Components/themeProvider/ThemeToggleButton";
-
+import { Outlet } from "react-router-dom";
 const Breadcrumb = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
@@ -47,7 +47,7 @@ const Breadcrumb = () => {
   );
 };
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -198,7 +198,7 @@ const Layout = ({ children }) => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
           <div className="container mx-auto p-4 text-black dark:text-white">
             <Breadcrumb />
-            {children}
+             <Outlet /> 
           </div>
         </main>
       </div>

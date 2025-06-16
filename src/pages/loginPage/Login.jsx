@@ -4,7 +4,10 @@ import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { adminLogin, verifyOtp, currentAdmin } from "../../store/authSlice";
+import { adminLogin, verifyOtp,currentAdmin } from "../../store/authSlice";
+import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,12 +61,18 @@ const AdminLogin = () => {
       .then(() => {
         setOtpModal(false);
       })
-      .catch(() => {});
+      .then(() => {
+  toast.success("OTP Verified Successfully!");
+  setOtpModal(false);
+})
+.catch(() => {
+  toast.error("Invalid OTP. Please try again.");
+});
+
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div><ToastContainer position="top-center" /></div>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
         <h2 className="text-2xl font-semibold text-center mb-6 dark:text-white">Admin Login</h2>
         {loginError && <p className="text-red-600 text-center">{loginError}</p>}
@@ -90,8 +99,14 @@ const AdminLogin = () => {
                 required
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
               />
-              <button
-                type="button"
+               <Link
+            to="/forgotPassword"
+            className="flex justify-center text-blue-600 hover:underline"
+          >
+            Forgot Password?
+          </Link>{" "}
+              <button 
+                type="button" 
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300"
                 onClick={() => setShowPassword(!showPassword)}
               >
