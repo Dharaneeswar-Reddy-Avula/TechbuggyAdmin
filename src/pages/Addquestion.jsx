@@ -57,11 +57,11 @@ const Addquestion = () => {
       console.warn("Backend delete failed (ignored for local delete):", error.message);
     }
 
-    // Always delete locally
     setQuestions((prev) =>
       prev.filter((_, index) => index !== questionIndex)
     );
   };
+
 
   const handleEdit = (index) => {
     setCurrentQuestion(questions[index]);
@@ -114,7 +114,6 @@ const Addquestion = () => {
 
       alert("Quiz submitted successfully!");
 
-      // Reset state
       setQuestions([]);
       setCurrentQuestion({ question: "", options: ["", "", "", ""], correctAnswer: "" });
     } catch (error) {
@@ -123,14 +122,14 @@ const Addquestion = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto text-black dark:text-white dark:bg-gray-900 transition-colors duration-300 min-h-screen">
       <h2 className="text-3xl font-bold mb-6">Add a Question</h2>
 
-      <div className="bg-gradient-to-r from-blue-500 to-blue-800 text-white p-6 rounded-lg shadow-lg mb-6">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-800 dark:from-blue-600 dark:to-blue-900 text-white p-6 rounded-lg shadow-lg mb-6">
         <input
           type="text"
           placeholder="Enter your question"
-          className="p-2 w-full mb-4 rounded-md text-black"
+          className="p-2 w-full mb-4 rounded-md text-black dark:text-white dark:bg-gray-800 dark:placeholder-gray-400"
           value={currentQuestion.question}
           onChange={(e) => handleQuestionChange(e.target.value)}
         />
@@ -141,19 +140,21 @@ const Addquestion = () => {
             <div
               key={index}
               className={`relative flex items-center gap-3 mb-3 border-2 rounded-md p-2 ${
-                isCorrect ? "border-green-500 bg-green-50" : "border-transparent"
+                isCorrect ? "border-green-500 bg-green-50 dark:bg-green-900" : "border-transparent"
               }`}
             >
               <input
                 type="text"
                 placeholder={`Option ${index + 1}`}
-                className="flex-grow p-2 rounded-md text-black border border-gray-300"
+                className="flex-grow p-2 rounded-md text-black dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
                 value={option}
                 onChange={(e) => handleOptionChange(index, e.target.value)}
               />
               <div
                 className={`w-5 h-5 border-2 rounded-sm cursor-pointer ${
-                  isCorrect ? "bg-green-500 border-green-700" : "border-white"
+                  isCorrect
+                    ? "bg-green-500 border-green-700"
+                    : "border-white dark:border-gray-400"
                 }`}
                 onClick={() => handleCorrectAnswerChange(option)}
               ></div>
@@ -163,13 +164,13 @@ const Addquestion = () => {
 
         <div className="flex justify-end gap-4 mt-4">
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
             onClick={handleNextQuestion}
           >
             Next Question
           </button>
           <button
-            className="bg-green-600 text-white px-4 py-2 rounded-md"
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
             onClick={handleSubmit}
           >
             Submit Quiz
@@ -181,16 +182,16 @@ const Addquestion = () => {
         {questions.map((q, qIndex) => (
           <div
             key={qIndex}
-            className="flex items-start justify-between bg-white shadow-md p-4 rounded-lg mb-3"
+            className="flex items-start justify-between bg-white dark:bg-gray-800 shadow-md p-4 rounded-lg mb-3"
           >
             <div>
               <p className="font-semibold">Q{qIndex + 1}: {q.question}</p>
-              <ul className="list-disc ml-5 text-gray-600">
+              <ul className="list-disc ml-5 text-gray-600 dark:text-gray-300">
                 {q.options.map((opt, i) => (
                   <li
                     key={i}
                     className={`${
-                      opt === q.correctAnswer ? "text-green-600 font-bold" : ""
+                      opt === q.correctAnswer ? "text-green-600 font-bold dark:text-green-400" : ""
                     }`}
                   >
                     {opt}
@@ -200,13 +201,13 @@ const Addquestion = () => {
             </div>
             <div className="flex flex-col gap-2">
               <button
-                className="text-blue-600"
+                className="text-blue-600 dark:text-blue-400"
                 onClick={() => handleEdit(qIndex)}
               >
                 <FaEdit />
               </button>
               <button
-                className="text-red-600"
+                className="text-red-600 dark:text-red-400"
                 onClick={() => handleDelete(qIndex)}
               >
                 <FaTrash />

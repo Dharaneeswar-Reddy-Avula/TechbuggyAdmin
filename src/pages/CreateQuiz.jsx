@@ -50,6 +50,8 @@ const CreateQuiz = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-gradient-to-br from-blue-500 to-blue-800 p-8 rounded-2xl shadow-2xl w-[450px] text-white">
+    <div className="flex items-center justify-center  bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+      <div className="bg-gradient-to-br from-blue-500 to-blue-800 dark:from-blue-600 dark:to-blue-900 p-8 rounded-2xl shadow-2xl w-[450px] text-white">
         <h2 className="text-3xl font-extrabold mb-6 text-center">Create a Quiz</h2>
 
         <input
@@ -57,11 +59,11 @@ const CreateQuiz = () => {
           placeholder="Quiz Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-4 py-3 mb-4 rounded-lg text-black outline-none shadow-md focus:ring-2 focus:ring-blue-300"
+          className="w-full px-4 py-3 mb-4 rounded-lg text-black dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 outline-none shadow-md focus:ring-2 focus:ring-blue-300"
         />
 
         <select
-          className="w-full px-4 py-3 mb-4 rounded-lg text-black outline-none shadow-md focus:ring-2 focus:ring-blue-300"
+          className="w-full px-4 py-3 mb-4 rounded-lg text-black dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 outline-none shadow-md focus:ring-2 focus:ring-blue-300"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -77,23 +79,14 @@ const CreateQuiz = () => {
           placeholder="Quiz Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full px-4 py-3 mb-4 rounded-lg text-black outline-none shadow-md focus:ring-2 focus:ring-blue-300"
+          className="w-full px-4 py-3 mb-4 rounded-lg text-black dark:text-white dark:bg-gray-800 dark:placeholder-gray-400 outline-none shadow-md focus:ring-2 focus:ring-blue-300"
         ></textarea>
-
-        <input
-          type="number"
-          min="1"
-          placeholder="Time in minutes"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="w-full px-4 py-3 mb-4 rounded-lg text-black outline-none shadow-md focus:ring-2 focus:ring-blue-300"
-        />
 
         <button
           className={`w-full font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform ${
             loading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white hover:scale-105 active:scale-95"
+              : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white hover:scale-105 active:scale-95 dark:bg-gray-100 dark:text-blue-800 dark:hover:bg-blue-600 dark:hover:text-white"
           }`}
           onClick={handleCreateQuiz}
           disabled={loading || !title || !category || !description || !time}
