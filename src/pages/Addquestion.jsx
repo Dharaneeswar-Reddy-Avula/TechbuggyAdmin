@@ -62,6 +62,7 @@ const Addquestion = () => {
     );
   };
 
+
   const handleEdit = (index) => {
     setCurrentQuestion(questions[index]);
     setQuestions(questions.filter((_, i) => i !== index));
