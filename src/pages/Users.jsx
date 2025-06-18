@@ -6,8 +6,8 @@ import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoCloseSharp } from "react-icons/io5";
-// const API_URL = "https://backteg.onrender.com/api";
-const API_URL = "http://localhost:8009/api";
+const API_URL = "https://backteg.onrender.com/api";
+//const API_URL = "http://localhost:8009/api";
 import { AiOutlineEye } from "react-icons/ai";
 
 const Users = () => {

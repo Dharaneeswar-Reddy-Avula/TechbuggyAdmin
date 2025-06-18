@@ -15,7 +15,7 @@ const CreateQuiz = () => {
     }
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8009/api/tests/createquiz", {
+      const response = await fetch("https://backteg.onrender.com/api/tests/createquiz", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
