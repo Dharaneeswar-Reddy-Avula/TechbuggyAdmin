@@ -95,6 +95,8 @@ const CreateQuiz = () => {
         </button>
       </div>
     </div>
+    </div>
+    </div>
   );
 };
 
