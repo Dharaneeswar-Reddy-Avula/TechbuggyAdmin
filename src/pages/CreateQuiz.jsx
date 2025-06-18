@@ -6,13 +6,20 @@ const CreateQuiz = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [time, setTime] = useState(""); // ⏱️ New time state
   const [loading, setLoading] = useState(false);
 
   const handleCreateQuiz = async () => {
-    if (!title || !description || !category) {
+    if (!title || !description || !category || !time) {
       alert("All fields are required!");
       return;
     }
+
+    if (isNaN(time) || Number(time) <= 0) {
+      alert("Please enter a valid time in minutes.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch("http://localhost:8009/api/tests/createquiz", {
@@ -21,7 +28,7 @@ const CreateQuiz = () => {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ title, category, description }),
+        body: JSON.stringify({ title, category, description, time }), // 🧩 Include time
       });
 
       const data = await response.json();
@@ -41,6 +48,8 @@ const CreateQuiz = () => {
   };
 
   return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-gradient-to-br from-blue-500 to-blue-800 p-8 rounded-2xl shadow-2xl w-[450px] text-white">
     <div className="flex items-center justify-center  bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       <div className="bg-gradient-to-br from-blue-500 to-blue-800 dark:from-blue-600 dark:to-blue-900 p-8 rounded-2xl shadow-2xl w-[450px] text-white">
         <h2 className="text-3xl font-extrabold mb-6 text-center">Create a Quiz</h2>
@@ -80,7 +89,7 @@ const CreateQuiz = () => {
               : "bg-white text-blue-700 hover:bg-blue-700 hover:text-white hover:scale-105 active:scale-95 dark:bg-gray-100 dark:text-blue-800 dark:hover:bg-blue-600 dark:hover:text-white"
           }`}
           onClick={handleCreateQuiz}
-          disabled={loading || !title || !category || !description}
+          disabled={loading || !title || !category || !description || !time}
         >
           {loading ? "Creating..." : "Create Quiz"}
         </button>
