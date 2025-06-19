@@ -25,7 +25,7 @@ const Addquestion = () => {
   const handleCorrectAnswerChange = (selectedOption) => {
     setCurrentQuestion((prev) => ({
       ...prev,
-      correctAnswer: selectedOption,
+      correctAnswer: selectedOption.trim(),
     }));
   };
 
