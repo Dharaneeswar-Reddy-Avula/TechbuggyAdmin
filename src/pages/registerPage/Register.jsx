@@ -18,6 +18,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   const dispatch = useDispatch();
   const {
@@ -38,14 +39,26 @@ const AdminRegister = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    dispatch(requestAdminOtp({ email }))
-      .unwrap()
-      .then(() => setOtpModal(true))
-      .catch(() => {});
-    setLoading(false);
-  };
+  e.preventDefault();
+
+  // Password regex: at least 1 uppercase, 1 lowercase, 1 number, 1 special char, and min 8 characters
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+  if (!passwordPattern.test(password)) {
+    setPasswordError(
+      "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+    );
+    return;
+  }
+
+  setPasswordError("");
+  setLoading(true);
+  dispatch(requestAdminOtp({ email }))
+    .unwrap()
+    .then(() => setOtpModal(true))
+    .catch(() => {});
+  setLoading(false);
+};
 
   const handleChange = (index, value) => {
     if (!/\d/.test(value) && value !== "") return;
@@ -85,7 +98,9 @@ const AdminRegister = ({ isOpen, onClose }) => {
           Admin Register
         </h2>
         {registerOtpError && (
-          <p className="text-red-600 dark:text-red-400 text-center mb-2">{registerOtpError}</p>
+          <p className="text-red-600 dark:text-red-400 text-center mb-2">
+            {registerOtpError}
+          </p>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -129,7 +144,11 @@ const AdminRegister = ({ isOpen, onClose }) => {
                 {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
               </button>
             </div>
+            {passwordError && (
+              <p className="text-sm text-red-600 mt-1">{passwordError}</p>
+            )}
           </div>
+
           <div>
             <label className="block text-sm font-medium mb-1">Role</label>
             <input
