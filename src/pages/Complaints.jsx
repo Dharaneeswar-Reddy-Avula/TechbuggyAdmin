@@ -95,7 +95,7 @@ const Complaints = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500 dark:text-gray-300 truncate max-w-xs" title={user.email}>
-                        {user.email}
+                        {user.userEmail}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

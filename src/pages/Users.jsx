@@ -84,8 +84,8 @@ const Users = () => {
 
     try {
       const { data } = await axios.put(`
-        ${API_URL}/User/users/${selectedUser._id},
-        formData`
+        ${API_URL}/User/users/${selectedUser._id}`,
+        formData
       );
 
       // Update users in UI
