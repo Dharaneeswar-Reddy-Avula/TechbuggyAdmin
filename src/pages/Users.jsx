@@ -6,8 +6,8 @@ import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoCloseSharp } from "react-icons/io5";
-// const API_URL = "https://backteg.onrender.com/api";
-const API_URL = "http://localhost:8009/api";
+const API_URL = "https://backteg.onrender.com/api";
+//const API_URL = "http://localhost:8009/api";
 import { AiOutlineEye } from "react-icons/ai";
 
 const Users = () => {
@@ -83,9 +83,9 @@ const Users = () => {
     if (!selectedUser) return;
 
     try {
-      const { data } = await axios.put(
-        `${API_URL}/User/users/${selectedUser._id}`,
-        formData
+      const { data } = await axios.put(`
+        ${API_URL}/User/users/${selectedUser._id},
+        formData`
       );
 
       // Update users in UI
@@ -224,7 +224,7 @@ const Users = () => {
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  {["S.no", "Name", "Email", "Status", "Password", "Actions"].map((head, idx) => (
+                  {["S.no", "Name", "Email", "Status", "Registered On", "Actions"].map((head, idx) => (
                     <th
                       key={idx}
                       scope="col"
@@ -238,29 +238,19 @@ const Users = () => {
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredUsers.map((user, index) => (
                   <tr key={user._id || index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate max-w-xs">
-                        {user.username}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                        {user.email}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-300 text-green-800 dark:text-green-900">
-                        Active
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                        {user.password}
-                      </div>
-                    </td>
+  <td className="px-6 py-4">{index + 1}</td>
+  <td className="px-6 py-4">{user.username}</td>
+  <td className="px-6 py-4">{user.email}</td>
+  <td className="px-6 py-4">
+    <span className="px-2 inline-flex text-sm font-semibold rounded-full bg-green-100 text-green-800">
+      Active
+    </span>
+  </td>
+  <td className="px-6 py-4">
+    {user.createdAt
+      ? new Date(user.createdAt).toLocaleDateString("en-GB")
+      : "N/A"}
+  </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-3">
                       
