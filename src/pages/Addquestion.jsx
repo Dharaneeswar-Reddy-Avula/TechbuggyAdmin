@@ -10,6 +10,7 @@ const Addquestion = () => {
     question: "",
     options: ["", "", "", ""],
     correctAnswer: "",
+     image: null,
   });
 
   const handleQuestionChange = (value) => {
@@ -28,6 +29,20 @@ const Addquestion = () => {
       correctAnswer: selectedOption,
     }));
   };
+  const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCurrentQuestion((prev) => ({
+        ...prev,
+        image: reader.result, // base64 string
+      }));
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
 
   const handleNextQuestion = () => {
     if (
@@ -161,6 +176,28 @@ const Addquestion = () => {
             </div>
           );
         })}
+        {/* Image Upload Section */}
+<div className="mb-4">
+  <label className="block mb-1 font-semibold">Attach Image (optional)</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+      file:rounded-md file:border-0
+      file:text-sm file:font-semibold
+      file:bg-blue-50 file:text-blue-700
+      hover:file:bg-blue-100"
+  />
+  {currentQuestion.image && (
+    <img
+      src={currentQuestion.image}
+      alt="Question Preview"
+      className="mt-2 rounded-md max-h-40"
+    />
+  )}
+</div>
+
 
         <div className="flex justify-end gap-4 mt-4">
           <button
@@ -186,6 +223,13 @@ const Addquestion = () => {
           >
             <div>
               <p className="font-semibold">Q{qIndex + 1}: {q.question}</p>
+              {q.image && (
+        <img
+          src={q.image}
+          alt={`Q${qIndex + 1} Preview`}
+          className="my-2 rounded-md max-h-40"
+        />
+      )}
               <ul className="list-disc ml-5 text-gray-600 dark:text-gray-300">
                 {q.options.map((opt, i) => (
                   <li
