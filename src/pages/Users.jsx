@@ -137,7 +137,7 @@ const Users = () => {
           <input
             type="text"
             value={search}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:text-black"
             placeholder="Search Users..."
             onChange={(e) => {
               setSearch(e.target.value);
@@ -200,7 +200,7 @@ const Users = () => {
                     name="username"
                     value={formData.username}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:text-black"
                     placeholder="Enter username"
                     required
                   />
@@ -219,7 +219,7 @@ const Users = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:text-black"
                     placeholder="Enter email"
                     required
                   />
@@ -335,7 +335,7 @@ const Users = () => {
               <div className="space-y-4 text-sm text-gray-700">
                 <div className="flex flex-col">
                   <span className="text-xs text-gray-400">Username</span>
-                  <span className="font-medium text-base">
+                  <span className="font-medium text-base dark:text-black">
                     {viewUser.username}
                   </span>
                 </div>
