@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   requestAdminOtp,
@@ -19,7 +19,7 @@ const AdminRegister = ({ isOpen, onClose }) => {
   const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
-
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const {
     registerOtpLoading,
@@ -35,30 +35,36 @@ const AdminRegister = ({ isOpen, onClose }) => {
       setPassword("");
       setRole("");
       setShowPassword(false);
+      setError(null);
     }
   }, [isOpen]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Password regex: at least 1 uppercase, 1 lowercase, 1 number, 1 special char, and min 8 characters
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    // Password regex: at least 1 uppercase, 1 lowercase, 1 number, 1 special char, and min 8 characters
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-  if (!passwordPattern.test(password)) {
-    setPasswordError(
-      "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
-    );
-    return;
-  }
+    if (!passwordPattern.test(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
 
-  setPasswordError("");
-  setLoading(true);
-  dispatch(requestAdminOtp({ email }))
-    .unwrap()
-    .then(() => setOtpModal(true))
-    .catch(() => {});
-  setLoading(false);
-};
+    setPasswordError("");
+    setLoading(true);
+    dispatch(requestAdminOtp({ email }))
+      .unwrap()
+      .then(() => {setOtpModal(true);
+        // toast.success("OTP sent Successfully")
+      })
+      .catch((err) => {
+        setError(err);
+        // toast.error(err)
+      });
+    setLoading(false);
+  };
 
   const handleChange = (index, value) => {
     if (!/\d/.test(value) && value !== "") return;
@@ -92,14 +98,14 @@ const AdminRegister = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex z-50 items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-opacity-80">
-      <ToastContainer position="top-center" />
+      {/* <ToastContainer position="top-left" autoClose={5000} closeOnClick /> */}
       <div className="bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-4">
           Admin Register
         </h2>
-        {registerOtpError && (
+        {error && (
           <p className="text-red-600 dark:text-red-400 text-center mb-2">
-            {registerOtpError}
+            {error}
           </p>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">

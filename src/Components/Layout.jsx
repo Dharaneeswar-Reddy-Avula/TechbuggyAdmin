@@ -95,7 +95,7 @@ const Layout = () => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-800">
-      <ToastContainer position="top-center" />
+      {/* <ToastContainer position="top-center" /> */}
       {/* Sidebar */}
       <aside
         className={`${
