@@ -18,7 +18,7 @@ import ProtectedRoute from './Components/protectedRoute/ProtectedRoute';
 import CreateQuiz from './pages/CreateQuiz';
 import Addquestion from './pages/Addquestion';
 import { ToastContainer } from 'react-toastify';
-
+import Getquestion from './pages/registerPage/Getquestion';
 const App = () => {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
@@ -57,6 +57,7 @@ const App = () => {
           <Route path="subscription" element={<Subscription />} />
           <Route path="createquiz" element={<CreateQuiz />} />
           <Route path="addquestion/:quizId" element={<Addquestion />} />
+          <Route path="getquestion/:quizId" element={<Getquestion/>} />
         </Route>
 
         {/* 404 fallback */}
