@@ -12,7 +12,7 @@ const Subscription = () => {
   const token = useSelector((state) => state.auth.token);
   const fetchSubscriptions = async () => {
     try {
-      const res = await axios.get("http://localhost:8009/api/subscriptions", {
+      const res = await axios.get("https://backteg.onrender.com/api/subscriptions", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,14 +46,14 @@ const Subscription = () => {
       if (editData) {
         // Update existing subscription
         await axios.put(
-          `http://localhost:8009/api/subscriptions/${editData._id}`,
+          `https://backteg.onrender.com/api/subscriptions/${editData._id}`,
           formData,
           config
         );
       } else {
         // Create new subscription
         await axios.post(
-          "http://localhost:8009/api/subscriptions/create",
+          "https://backteg.onrender.com/api/subscriptions/create",
           formData,
           config
         );
@@ -73,7 +73,7 @@ const Subscription = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:8009/api/subscriptions/${id}`, {
+      await axios.delete(`https://backteg.onrender.com/api/subscriptions/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
