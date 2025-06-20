@@ -192,7 +192,7 @@ const Users = () => {
                     htmlFor="username"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Username <span className="text-red-500">*</span>
+                    Username
                   </label>
                   <input
                     type="text"
@@ -202,7 +202,6 @@ const Users = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:text-black"
                     placeholder="Enter username"
-                    required
                   />
                 </div>
 
@@ -211,7 +210,7 @@ const Users = () => {
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Email <span className="text-red-500">*</span>
+                    Email
                   </label>
                   <input
                     type="email"
@@ -221,7 +220,7 @@ const Users = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition dark:text-black"
                     placeholder="Enter email"
-                    required
+                  
                   />
                 </div>
 

@@ -107,7 +107,7 @@ const AdminLogin = () => {
           </Link>{" "}
               <button 
                 type="button" 
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300"
+                className="absolute top-3 right-3 flex items-center text-gray-500 dark:text-gray-300"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
