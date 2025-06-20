@@ -10,7 +10,7 @@ const Quizes = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await axios.get("http://localhost:8009/api/tests/getTests");
+        const response = await axios.get("https://backteg.onrender.com/api/tests/getTests");
         setQuizzes(response.data);
       } catch (error) {
         console.error("Failed to fetch quizzes", error);

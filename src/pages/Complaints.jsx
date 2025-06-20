@@ -1,33 +1,65 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 const API_URL = "https://backteg.onrender.com/api";
 
 const Complaints = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 10; // Fixed size of 10 complaints per page
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page = 1) => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${API_URL}/help/submissions`);
-      setUsers(data.data || []);
+      // Fetch complaints for the current page with a limit of 10
+      const response = await axios.get(`${API_URL}/help/submissions?page=${page}&limit=${itemsPerPage}`);
+      
+      // Ensure the response data is an array
+      const complaints = Array.isArray(response.data.data) ? response.data.data : [];
+      
+      // Validate that we don't receive more than itemsPerPage
+      if (complaints.length > itemsPerPage) {
+        console.warn(`Received ${complaints.length} items, expected up to ${itemsPerPage}. Check API pagination.`);
+      }
+      
+      // Set complaints for the current page
+      setUsers(complaints);
+      
+      // Set totalItems from API response (assuming API returns a 'total' field)
+      setTotalItems(response.data.total || complaints.length);
       setError(null);
     } catch (error) {
-      console.error("Failed to fetch the users:", error);
+      console.error("Failed to fetch complaints:", error);
       const message =
         error.response?.status === 404
           ? "API endpoint not found. Please check the server configuration."
           : "Failed to load complaints. Please try again later.";
       setError(message);
+      setUsers([]);
+      setTotalItems(0);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(currentPage);
+  }, [currentPage]);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < Math.ceil(totalItems / itemsPerPage)) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto md:px-4 sm:px-6 lg:px-8 py-8">
@@ -48,7 +80,7 @@ const Complaints = () => {
           <div className="p-6 bg-red-50 dark:bg-red-200 text-red-600 rounded-md mx-6 my-4 flex justify-between items-center">
             <span>{error}</span>
             <button
-              onClick={fetchUsers}
+              onClick={() => fetchUsers(currentPage)}
               className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition-colors"
               aria-label="Retry fetching complaints"
             >
@@ -86,7 +118,7 @@ const Complaints = () => {
                     className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                      {index + 1}
+                      {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-xs" title={user.name}>
@@ -94,7 +126,7 @@ const Complaints = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-300 truncate max-w-xs" title={user.email}>
+                      <div className="text-sm text-gray-500 dark:text-gray-300 truncate max-w-xs" title={user.userEmail}>
                         {user.userEmail}
                       </div>
                     </td>
@@ -115,23 +147,26 @@ const Complaints = () => {
           </div>
         )}
 
-        {users.length > 0 && (
-          <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        {totalItems > 0 && (
+          <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-300">
-              Showing <span className="font-medium">1</span> to <span className="font-medium">{users.length}</span> of{" "}
-              <span className="font-medium">{users.length}</span> results
+              Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+              <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of{" "}
+              <span className="font-medium">{totalItems}</span> results
             </div>
             <div className="flex space-x-2">
               <button
+                onClick={handlePrevious}
                 className="px-4 py-2 border rounded-md text-sm font-medium text-gray-700 dark:text-white bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50"
-                disabled
+                disabled={currentPage === 1}
                 aria-label="Previous page"
               >
                 Previous
               </button>
               <button
+                onClick={handleNext}
                 className="px-4 py-2 border rounded-md text-sm font-medium text-gray-700 dark:text-white bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50"
-                disabled
+                disabled={currentPage >= Math.ceil(totalItems / itemsPerPage)}
                 aria-label="Next page"
               >
                 Next
