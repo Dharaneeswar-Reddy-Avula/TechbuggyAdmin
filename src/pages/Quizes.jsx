@@ -10,13 +10,9 @@ const Quizes = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-<<<<<<< HEAD
-        const response = await axios.get("https://backteg.onrender.com/api/tests/getTests");
-=======
         const response = await axios.get(
           "https://backteg.onrender.com/api/tests/getTests"
         );
->>>>>>> 17043eefd119dc4b5bb0a13860d8a71652215655
         setQuizzes(response.data);
       } catch (error) {
         console.error("Failed to fetch quizzes", error);

@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
 const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
-  const [form, setForm] = useState({
+  const defaultForm = {
     name: "",
     price: "",
     durationInDays: "",
     billingCycle: "yearly",
     features: [""],
     isPopular: false,
-  });
+  };
+
+  const [form, setForm] = useState(defaultForm);
 
   useEffect(() => {
-    if (initialData) {
+    if (initialData && isOpen) {
       setForm({
         name: initialData.name || "",
         price: initialData.price || "",
@@ -21,8 +23,10 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         features: initialData.features?.length ? initialData.features : [""],
         isPopular: initialData.isPopular || false,
       });
+    } else if (!initialData && isOpen) {
+      setForm(defaultForm); // reset to empty if opening for "Add"
     }
-  }, [initialData]);
+  }, [initialData, isOpen]);
 
   const handleFeatureChange = (index, value) => {
     const updated = [...form.features];
@@ -48,8 +52,9 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4 overflow-y-auto">
-      <div className={`bg-white  ${initialData ?"mt-52":""} dark:bg-gray-900 dark:text-white rounded-xl shadow-lg w-full max-w-xl`}>
+   <div className="fixed min-h-screen inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
+  <div className="bg-white h-[500px] overflow-y-auto scrollbar-hide dark:bg-gray-900 dark:text-white rounded-xl shadow-lg w-full max-w-xl">
+
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold">
@@ -64,11 +69,11 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
+        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4 scrollbar-hide ">
           <input
             type="text"
             placeholder="Plan Name"
-            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400"
+            className="w-full p-2 rounded border dark:bg-gray-800"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -77,7 +82,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
           <input
             type="number"
             placeholder="Price"
-            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400"
+            className="w-full p-2 rounded border dark:bg-gray-800"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             required
@@ -86,7 +91,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
           <input
             type="number"
             placeholder="Duration in Days"
-            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400"
+            className="w-full p-2 rounded border dark:bg-gray-800"
             value={form.durationInDays}
             onChange={(e) => setForm({ ...form, durationInDays: e.target.value })}
             required
@@ -95,7 +100,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
           <select
             value={form.billingCycle}
             onChange={(e) => setForm({ ...form, billingCycle: e.target.value })}
-            className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            className="w-full p-2 rounded border dark:bg-gray-800"
           >
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
@@ -110,7 +115,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                   type="text"
                   value={feature}
                   onChange={(e) => handleFeatureChange(index, e.target.value)}
-                  className="flex-1 p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:placeholder-gray-400"
+                  className="flex-1 p-2 rounded border dark:bg-gray-800"
                   placeholder={`Feature ${index + 1}`}
                   required
                 />
@@ -118,7 +123,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                   <button
                     type="button"
                     onClick={() => removeFeature(index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500"
                   >
                     <IoMdClose />
                   </button>
@@ -134,20 +139,18 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
             </button>
           </div>
 
-          {/* Popular */}
+          {/* Popular Checkbox */}
           <label className="flex items-center gap-2 text-sm font-medium">
             <input
               type="checkbox"
               checked={form.isPopular}
-              onChange={(e) =>
-                setForm({ ...form, isPopular: e.target.checked })
-              }
+              onChange={(e) => setForm({ ...form, isPopular: e.target.checked })}
               className="accent-blue-600"
             />
             Mark as Popular
           </label>
 
-          {/* Buttons */}
+          {/* Action Buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
@@ -158,7 +161,7 @@ const AddSubscriptionModal = ({ isOpen, onClose, onSubmit, initialData }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
+              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
             >
               {initialData ? "Update Plan" : "Add Plan"}
             </button>
