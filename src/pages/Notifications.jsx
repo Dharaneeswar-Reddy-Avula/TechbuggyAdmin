@@ -209,9 +209,9 @@ const Notifications = () => {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <div className="grid grid-cols-12 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 mb-2 rounded-md shadow-sm px-6 py-4 gap-4 font-medium min-w-[700px]">
+              <div className="grid grid-cols-8 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 mb-2 rounded-md shadow-sm px-6 py-4 gap-4 font-medium min-w-[700px]">
                 <div className="col-span-3">Title</div>
-                <div className="col-span-5">Description</div>
+                {/* <div className="col-span-5">Description</div> */}
                 <div className="col-span-2">Links</div>
                 <div className="col-span-1 text-center">Update</div>
                 <div className="col-span-1 text-center">Delete</div>
@@ -220,10 +220,10 @@ const Notifications = () => {
                 {filteredNotifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className="grid grid-cols-12 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors mb-2 duration-150 rounded-md shadow px-6 py-4 gap-4 items-center"
+                    className="grid grid-cols-8 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors mb-2 duration-150 rounded-md shadow px-6 py-4 gap-4 items-center"
                   >
                     <div className="col-span-3 truncate">{notification.title}</div>
-                    <div className="col-span-5 truncate">{notification.description}</div>
+                    {/* <div className="col-span-5 truncate">{notification.description}</div> */}
                     <div className="col-span-2">
                       {notification.links ? (
                         <a
