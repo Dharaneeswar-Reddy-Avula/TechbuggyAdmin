@@ -10,7 +10,7 @@
 // // const API_URL = "http://localhost:8009/api";
 // import { AiOutlineEye } from "react-icons/ai";
 
-// const API_URL = "https://backteg.onrender.com/api";
+// const API_URL = "http://localhost:8009/api";
 
 // const Users = () => {
 //   const [users, setUsers] = useState([]);
@@ -467,7 +467,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineEye } from "react-icons/ai";
 
-const API_URL = "https://backteg.onrender.com/api";
+const API_URL = "http://localhost:8009/api";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

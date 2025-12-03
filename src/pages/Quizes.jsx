@@ -11,7 +11,7 @@ const Quizes = () => {
     const fetchQuizzes = async () => {
       try {
         const response = await axios.get(
-          "https://backteg.onrender.com/api/tests/getTests"
+          "http://localhost:8009/api/tests/getTests"
         );
        
         setQuizzes(response.data);

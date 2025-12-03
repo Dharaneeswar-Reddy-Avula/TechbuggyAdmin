@@ -13,6 +13,8 @@ import AdminRegister from "../pages/registerPage/Register";
 import { logout } from "../store/authSlice";
 import { ThemeToggleButton } from "../Components/themeProvider/ThemeToggleButton";
 import { Outlet } from "react-router-dom";
+import { AiOutlineProject } from "react-icons/ai";
+
 const Breadcrumb = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
@@ -64,6 +66,8 @@ const Layout = () => {
     { label: "Quizes", path: "quizes", icon: IoAlertCircle },
     { label: "Complaints", path: "complaint", icon: LuNotebookPen },
     { label: "Subscriptions", path: "subscription", icon: IoAlertCircle },
+    { label: 'projects', path: 'Projects', icon: AiOutlineProject },
+
   ];
 
   const isActive = (path) => location.pathname.includes(path);

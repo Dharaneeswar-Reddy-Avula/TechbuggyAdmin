@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import axios from "axios";
-const API_URL = "https://backteg.onrender.com/api";
+const API_URL = "http://localhost:8009/api";
 import { ToastContainer, toast } from "react-toastify";
 import { ImBin } from "react-icons/im";
 import { MdEditNotifications } from "react-icons/md";

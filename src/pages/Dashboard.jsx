@@ -46,9 +46,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const cardResponse = await axios.get('https://backteg.onrender.com/api/dashboard/cards');
+        const cardResponse = await axios.get('http://localhost:8009/api/dashboard/cards');
         setCardData(cardResponse.data);
-        const chartResponse = await axios.get(`https://backteg.onrender.com/api/dashboard/chart/${timeframe}`);
+        const chartResponse = await axios.get(`http://localhost:8009/api/dashboard/chart/${timeframe}`);
         setChartData(chartResponse.data);
       } catch (err) {
         setError(err.response?.data?.message || err.message || 'Failed to load dashboard data');

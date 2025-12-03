@@ -9,6 +9,7 @@ const SideMenu = ({ setActiveComponent, setIsSideMenuVisible,isVisible, toggleSi
     { id: 'dashboard', label: 'Dashboard', component: 'DASHBOARD' },
     { id: 'quizes', label: 'Hello', component: 'QUIZES' }, // Adjusted for consistency
     { id: 'plans', label: 'Plans', component: 'PLANS' },
+    { id: 'projects', label: 'Projects', component: 'PROJECTS' },
     { id: 'notifications', label: 'Notifications', component: 'NOTIFICATIONS' },
     { id: 'logout', label: 'Logout', component: 'DASHBOARD' },
   ];

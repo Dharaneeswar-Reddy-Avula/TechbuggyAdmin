@@ -20,6 +20,7 @@ import Addquestion from "./pages/Addquestion";
 import { ToastContainer } from "react-toastify";
 import Getquestion from "./pages/registerPage/Getquestion";
 import "react-toastify/dist/ReactToastify.css";
+import Projects from "./pages/Projects";
 const App = () => {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="createquiz" element={<CreateQuiz />} />
           <Route path="addquestion/:quizId" element={<Addquestion />} />
           <Route path="getquestion/:quizId" element={<Getquestion />} />
+       <Route  path="projects" element={<Projects />}/>
         </Route>
 
         {/* 404 fallback */}

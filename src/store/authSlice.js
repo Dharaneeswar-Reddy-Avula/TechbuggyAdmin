@@ -7,7 +7,7 @@ export const adminLogin = createAsyncThunk(
   "auth/adminlogin",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      await axios.post("https://backteg.onrender.com/api/admin/login", {
+      await axios.post("http://localhost:8009/api/admin/login", {
         email,
         password,
       });
@@ -20,13 +20,13 @@ export const adminLogin = createAsyncThunk(
 );
 
 //verify otp
-// https://backteg.onrender.com
+// http://localhost:8009
 export const verifyOtp = createAsyncThunk(
   "auth/verifyotp",
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://backteg.onrender.com/api/admin/verifyOtp",
+        "http://localhost:8009/api/admin/verifyOtp",
         { email, otp }
       );
       toast.success("Login Successful!");
@@ -48,7 +48,7 @@ export const requestAdminOtp = createAsyncThunk(
     try {
       const token = getState().auth.token;
       await axios.post(
-        "https://backteg.onrender.com/api/admin/register/request-otp",
+        "http://localhost:8009/api/admin/register/request-otp",
         {
           email,
         },{
@@ -73,7 +73,7 @@ export const verifyRegisterOtp = createAsyncThunk(
   async ({ name, email, password, role, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://backteg.onrender.com/api/admin/register/verify-otp",
+        "http://localhost:8009/api/admin/register/verify-otp",
         {
           name,
           email,
@@ -98,7 +98,7 @@ export const mailToNewAdmin = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       await axios.post(
-        "https://backteg.onrender.com/api/admin/mailToNewAdmin",
+        "http://localhost:8009/api/admin/mailToNewAdmin",
         { email, password }
       );
     } catch (err) {
@@ -116,7 +116,7 @@ export const currentAdmin = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const response = await axios.post(
-        "https://backteg.onrender.com/api/admin/currentAdmin",
+        "http://localhost:8009/api/admin/currentAdmin",
         {},
 
         {

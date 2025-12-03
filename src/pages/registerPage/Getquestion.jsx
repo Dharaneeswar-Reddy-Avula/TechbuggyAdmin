@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "https://backteg.onrender.com/api";
+const API_URL = "http://localhost:8009/api";
 // const API_URL="http://localhost:8009/api";
 
 const EditQuiz = () => {

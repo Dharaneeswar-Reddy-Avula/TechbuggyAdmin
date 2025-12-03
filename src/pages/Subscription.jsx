@@ -12,7 +12,7 @@
 //   const token = useSelector((state) => state.auth.token);
 //   const fetchSubscriptions = async () => {
 //     try {
-//       const res = await axios.get("https://backteg.onrender.com/api/subscriptions", {
+//       const res = await axios.get("http://localhost:8009/api/subscriptions", {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -46,14 +46,14 @@
 //       if (editData) {
 //         // Update existing subscription
 //         await axios.put(
-//           `https://backteg.onrender.com/api/subscriptions/${editData._id}`,
+//           `http://localhost:8009/api/subscriptions/${editData._id}`,
 //           formData,
 //           config
 //         );
 //       } else {
 //         // Create new subscription
 //         await axios.post(
-//           "https://backteg.onrender.com/api/subscriptions/create",
+//           "http://localhost:8009/api/subscriptions/create",
 //           formData,
 //           config
 //         );
@@ -73,7 +73,7 @@
 //         return;
 //       }
 
-//       await axios.delete(`https://backteg.onrender.com/api/subscriptions/${id}`, {
+//       await axios.delete(`http://localhost:8009/api/subscriptions/${id}`, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -144,7 +144,7 @@ const Subscription = () => {
   const fetchSubscriptions = async () => {
     setLoading(true); // ✅ Start loading
     try {
-      const res = await axios.get("https://backteg.onrender.com/api/subscriptions", {
+      const res = await axios.get("http://localhost:8009/api/subscriptions", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -179,13 +179,13 @@ const Subscription = () => {
 
       if (editData) {
         await axios.put(
-          `https://backteg.onrender.com/api/subscriptions/${editData._id}`,
+          `http://localhost:8009/api/subscriptions/${editData._id}`,
           formData,
           config
         );
       } else {
         await axios.post(
-          "https://backteg.onrender.com/api/subscriptions/create",
+          "http://localhost:8009/api/subscriptions/create",
           formData,
           config
         );
@@ -205,7 +205,7 @@ const Subscription = () => {
         return;
       }
 
-      await axios.delete(`https://backteg.onrender.com/api/subscriptions/${id}`, {
+      await axios.delete(`http://localhost:8009/api/subscriptions/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
