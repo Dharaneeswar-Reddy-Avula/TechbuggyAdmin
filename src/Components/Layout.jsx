@@ -66,7 +66,8 @@ const Layout = () => {
     { label: "Quizes", path: "quizes", icon: IoAlertCircle },
     { label: "Complaints", path: "complaint", icon: LuNotebookPen },
     { label: "Subscriptions", path: "subscription", icon: IoAlertCircle },
-    { label: 'projects', path: 'Projects', icon: AiOutlineProject },
+    { label: 'Projects', path: 'projects', icon: AiOutlineProject },
+    { label: 'Payments', path: 'payments', icon: AiOutlineProject },
 
   ];
 

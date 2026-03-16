@@ -13,6 +13,9 @@ const Projects = () => {
   const [adminComment, setAdminComment] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null); // 'approve' or 'reject'
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [requestAmount, setRequestAmount] = useState('');
+  const [requestDescription, setRequestDescription] = useState('');
 
   const API_BASE_URL = 'http://localhost:8009/api/admin';
   const token = useSelector((state) => state.auth.token);
@@ -111,11 +114,56 @@ const Projects = () => {
     }
   };
 
+  const handleRequestPayment = async () => {
+    if (!selectedProject) return;
+    if (!requestAmount || Number(requestAmount) <= 0) {
+      toast.warning('Please enter a valid amount');
+      return;
+    }
+    if (!requestDescription.trim()) {
+      toast.warning('Please enter a description for the payment request');
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${API_BASE_URL}/projects/${selectedProject._id}/payment-requests`,
+        { 
+          amount: Number(requestAmount),
+          description: requestDescription
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      toast.success('Payment request created successfully!');
+      setShowRequestModal(false);
+      setRequestAmount('');
+      setRequestDescription('');
+      setSelectedProject(null);
+      fetchProjects();
+    } catch (error) {
+      console.error('Error creating payment request:', error);
+      toast.error(error.response?.data?.message || 'Failed to create payment request');
+    }
+  };
+
   const openModal = (project, action) => {
     setSelectedProject(project);
     setActionType(action);
     setAdminComment('');
     setShowModal(true);
+  };
+
+  const openRequestModal = (project) => {
+    setSelectedProject(project);
+    setRequestAmount('');
+    setRequestDescription('');
+    setShowRequestModal(true);
   };
 
   const closeModal = () => {
@@ -305,6 +353,17 @@ const Projects = () => {
                       </button>
                     </div>
                   )}
+
+                  {project.status === 'confirmed' && (
+                    <div className="ml-4 flex flex-col gap-2">
+                       <button
+                        onClick={() => openRequestModal(project)}
+                        className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
+                      >
+                         💳 Request Payment
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -365,6 +424,60 @@ const Projects = () => {
                 <button
                   className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-400 font-semibold transition-colors"
                   onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Request Payment Modal */}
+        {showRequestModal && selectedProject && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4">💳 Request Custom Payment</h2>
+              
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Project: {selectedProject.title}</h3>
+                <p className="text-sm text-gray-500">
+                  <span className="font-semibold">Client:</span> {selectedProject.client?.companyName} ({selectedProject.client?.userName})
+                </p>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Amount (₹)</label>
+                <input
+                  type="number"
+                  min="1"
+                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="e.g. 5000"
+                  value={requestAmount}
+                  onChange={(e) => setRequestAmount(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Description / Reason</label>
+                <input
+                  type="text"
+                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="e.g. Extra server setup fee"
+                  value={requestDescription}
+                  onChange={(e) => setRequestDescription(e.target.value)}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-semibold transition-colors"
+                  onClick={handleRequestPayment}
+                >
+                  Create Request
+                </button>
+                <button
+                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-400 font-semibold transition-colors"
+                  onClick={() => setShowRequestModal(false)}
                 >
                   Cancel
                 </button>
