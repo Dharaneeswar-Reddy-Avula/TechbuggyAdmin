@@ -98,7 +98,7 @@ export const mailToNewAdmin = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       await axios.post(
-        "https://backteg-38ub.onrender.com/api/admin/mailToNewAdmin",
+        "http://backteg-38ub.onrender.com/api/admin/mailToNewAdmin",
         { email, password }
       );
     } catch (err) {
@@ -116,7 +116,7 @@ export const currentAdmin = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const response = await axios.post(
-        "https://backteg-38ub.onrender.com/api/admin/currentAdmin",
+        "http://backteg-38ub.onrender.com/api/admin/currentAdmin",
         {},
 
         {

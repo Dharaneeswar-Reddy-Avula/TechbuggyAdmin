@@ -116,7 +116,7 @@ export const currentAdmin = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const response = await axios.post(
-        "https://backteg-38ub.onrender.com/api/admin/currentAdmin",
+        "http://backteg-38ub.onrender.com/api/admin/currentAdmin",
         {},
 
         {
