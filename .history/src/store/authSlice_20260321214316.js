@@ -10,7 +10,7 @@ export const adminLogin = createAsyncThunk(
       await axios.post("https://backteg-38ub.onrender.com/api/admin/login", {
         email,
         password,
-      }, { withCredentials: true }   { withCredentials: true }  );
+      });
       toast.success("OTP sent Successfully!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -27,7 +27,7 @@ export const verifyOtp = createAsyncThunk(
     try {
       const response = await axios.post(
         "https://backteg-38ub.onrender.com/api/admin/verifyOtp",
-        { email, otp },
+        { email, otp }, { withCredentials: true }
       );
       toast.success("Login Successful!");
 
