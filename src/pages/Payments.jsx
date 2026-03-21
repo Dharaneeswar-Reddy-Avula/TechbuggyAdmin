@@ -14,7 +14,7 @@ const Payments = () => {
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(null); // 'confirm' or 'reject'
 
-  const API_BASE_URL = 'http://backteg-38ub.onrender.com/api/admin';
+  const API_BASE_URL = 'https://backteg-38ub.onrender.com/api/admin';
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {

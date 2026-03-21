@@ -7,7 +7,7 @@ export const adminLogin = createAsyncThunk(
   "auth/adminlogin",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      await axios.post("http://backteg-38ub.onrender.com/api/admin/login", {
+      await axios.post("https://backteg-38ub.onrender.com/api/admin/login", {
         email,
         password,
       });
@@ -20,13 +20,13 @@ export const adminLogin = createAsyncThunk(
 );
 
 //verify otp
-// http://backteg-38ub.onrender.com
+// https://backteg-38ub.onrender.com
 export const verifyOtp = createAsyncThunk(
   "auth/verifyotp",
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://backteg-38ub.onrender.com/api/admin/verifyOtp",
+        "https://backteg-38ub.onrender.com/api/admin/verifyOtp",
         { email, otp }
       );
       toast.success("Login Successful!");
@@ -48,7 +48,7 @@ export const requestAdminOtp = createAsyncThunk(
     try {
       const token = getState().auth.token;
       await axios.post(
-        "http://backteg-38ub.onrender.com/api/admin/register/request-otp",
+        "https://backteg-38ub.onrender.com/api/admin/register/request-otp",
         {
           email,
         },{
@@ -73,7 +73,7 @@ export const verifyRegisterOtp = createAsyncThunk(
   async ({ name, email, password, role, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://backteg-38ub.onrender.com/api/admin/register/verify-otp",
+        "https://backteg-38ub.onrender.com/api/admin/register/verify-otp",
         {
           name,
           email,
@@ -98,7 +98,7 @@ export const mailToNewAdmin = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       await axios.post(
-        "http://backteg-38ub.onrender.com/api/admin/mailToNewAdmin",
+        "https://backteg-38ub.onrender.com/api/admin/mailToNewAdmin",
         { email, password }
       );
     } catch (err) {
@@ -116,7 +116,7 @@ export const currentAdmin = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const response = await axios.post(
-        "http://backteg-38ub.onrender.com/api/admin/currentAdmin",
+        "https://backteg-38ub.onrender.com/api/admin/currentAdmin",
         {},
 
         {
