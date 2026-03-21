@@ -12,7 +12,7 @@
 //   const token = useSelector((state) => state.auth.token);
 //   const fetchSubscriptions = async () => {
 //     try {
-//       const res = await axios.get("https://backteg-38ub.onrender.com/api/subscriptions", {
+//       const res = await axios.get("http://backteg-38ub.onrender.com/api/subscriptions", {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -46,14 +46,14 @@
 //       if (editData) {
 //         // Update existing subscription
 //         await axios.put(
-//           `https://backteg-38ub.onrender.com/api/subscriptions/${editData._id}`,
+//           `http://backteg-38ub.onrender.com/api/subscriptions/${editData._id}`,
 //           formData,
 //           config
 //         );
 //       } else {
 //         // Create new subscription
 //         await axios.post(
-//           "https://backteg-38ub.onrender.com/api/subscriptions/create",
+//           "http://backteg-38ub.onrender.com/api/subscriptions/create",
 //           formData,
 //           config
 //         );
@@ -73,7 +73,7 @@
 //         return;
 //       }
 
-//       await axios.delete(`https://backteg-38ub.onrender.com/api/subscriptions/${id}`, {
+//       await axios.delete(`http://backteg-38ub.onrender.com/api/subscriptions/${id}`, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -144,7 +144,7 @@ const Subscription = () => {
   const fetchSubscriptions = async () => {
     setLoading(true); // ✅ Start loading
     try {
-      const res = await axios.get("https://backteg-38ub.onrender.com/api/subscriptions", {
+      const res = await axios.get("http://backteg-38ub.onrender.com/api/subscriptions", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -179,13 +179,13 @@ const Subscription = () => {
 
       if (editData) {
         await axios.put(
-          `https://backteg-38ub.onrender.com/api/subscriptions/${editData._id}`,
+          `http://backteg-38ub.onrender.com/api/subscriptions/${editData._id}`,
           formData,
           config
         );
       } else {
         await axios.post(
-          "https://backteg-38ub.onrender.com/api/subscriptions/create",
+          "http://backteg-38ub.onrender.com/api/subscriptions/create",
           formData,
           config
         );
@@ -205,7 +205,7 @@ const Subscription = () => {
         return;
       }
 
-      await axios.delete(`https://backteg-38ub.onrender.com/api/subscriptions/${id}`, {
+      await axios.delete(`http://backteg-38ub.onrender.com/api/subscriptions/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -232,10 +232,10 @@ const Subscription = () => {
 
       {/* ✅ Show loading */}
       {loading ? (
-<div className="flex flex-col items-center justify-center gap-4 py-8">
-        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-        <p className="text-blue-600 text-sm font-medium animate-pulse">Loading Subscriptions, please wait...</p>
-      </div>      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 py-8">
+          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+          <p className="text-blue-600 text-sm font-medium animate-pulse">Loading Subscriptions, please wait...</p>
+        </div>) : (
         <div className="flex flex-wrap gap-6">
           {subscriptions.map((plan) => (
             <SubscriptionCard

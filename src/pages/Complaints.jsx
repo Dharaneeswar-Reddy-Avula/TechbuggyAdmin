@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://backteg-38ub.onrender.com/api";
+const API_URL = "http://backteg-38ub.onrender.com/api";
 
 const Complaints = () => {
   const [users, setUsers] = useState([]);
@@ -16,18 +16,18 @@ const Complaints = () => {
       setLoading(true);
       // Fetch complaints for the current page with a limit of 10
       const response = await axios.get(`${API_URL}/help/submissions?page=${page}&limit=${itemsPerPage}`);
-      
+
       // Ensure the response data is an array
       const complaints = Array.isArray(response.data.data) ? response.data.data : [];
-      
+
       // Validate that we don't receive more than itemsPerPage
       if (complaints.length > itemsPerPage) {
         console.warn(`Received ${complaints.length} items, expected up to ${itemsPerPage}. Check API pagination.`);
       }
-      
+
       // Set complaints for the current page
       setUsers(complaints);
-      
+
       // Set totalItems from API response (assuming API returns a 'total' field)
       setTotalItems(response.data.total || complaints.length);
       setError(null);

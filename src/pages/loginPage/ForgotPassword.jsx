@@ -13,8 +13,8 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
 
   // Use localhost or your production URL
-  // const API_URL = "https://backteg-38ub.onrender.com/api";
-    const API_URL = "https://backteg-38ub.onrender.com/api";
+  // const API_URL = "http://backteg-38ub.onrender.com/api";
+  const API_URL = "http://backteg-38ub.onrender.com/api";
 
 
   const handleOtpChange = (index, value) => {

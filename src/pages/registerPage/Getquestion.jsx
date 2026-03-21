@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "https://backteg-38ub.onrender.com/api";
-// const API_URL="https://backteg-38ub.onrender.com/api";
+const API_URL = "http://backteg-38ub.onrender.com/api";
+// const API_URL="http://backteg-38ub.onrender.com/api";
 
 const EditQuiz = () => {
   const { quizId } = useParams();
@@ -21,7 +21,7 @@ const EditQuiz = () => {
     const fetchQuiz = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/tests/${quizId}`);
-    
+
         setQuizTitle(data.title);
         setDescription(data.description);
         setInstructions(data.instructions || "");
