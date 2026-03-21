@@ -30,7 +30,7 @@ const Payments = () => {
         return;
       }
       const url = filter ? `${API_BASE_URL}/payments?status=${filter}` : `${API_BASE_URL}/payments`;
-      
+
       const response = await axios.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -181,33 +181,29 @@ const Payments = () => {
         {/* Filter Tabs */}
         <div className="mb-6 flex gap-2 bg-white p-2 rounded-lg shadow">
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('pending')}
           >
             Pending ({stats.pending})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'confirmed' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'confirmed' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('confirmed')}
           >
             Confirmed ({stats.confirmed})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'rejected' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'rejected' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('rejected')}
           >
             Rejected ({stats.rejected})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('')}
           >
             All Submissions ({stats.total})
@@ -237,9 +233,9 @@ const Payments = () => {
                         {payment.status.toUpperCase()}
                       </span>
                     </div>
-                    
+
                     <p className="text-indigo-600 font-bold text-lg mb-4">Amount: ₹{payment.amount?.toLocaleString()} (Phase {payment.phase})</p>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
                         <span className="text-sm font-semibold text-gray-700">Client Info:</span>
@@ -263,9 +259,9 @@ const Payments = () => {
                     )}
 
                     <div className="mt-3 text-sm text-gray-500">
-                      Submitted: {new Date(payment.createdAt).toLocaleDateString('en-IN', { 
-                        year: 'numeric', 
-                        month: 'long', 
+                      Submitted: {new Date(payment.createdAt).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'long',
                         day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit'
@@ -303,7 +299,7 @@ const Payments = () => {
               <h2 className="text-2xl font-bold mb-4">
                 {actionType === 'confirm' ? '✅ Confirm Payment' : '❌ Reject Payment'}
               </h2>
-              
+
               <div className="mb-4 p-4 bg-gray-50 rounded-lg">
                 <h3 className="text-lg font-semibold mb-2">Project: {selectedPayment.project?.title}</h3>
                 <p className="text-gray-600 mb-2">Phase: <span className="font-semibold">{selectedPayment.phase}</span></p>

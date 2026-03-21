@@ -21,7 +21,7 @@ const EditQuiz = () => {
     const fetchQuiz = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/tests/${quizId}`);
-    
+
         setQuizTitle(data.title);
         setDescription(data.description);
         setInstructions(data.instructions || "");

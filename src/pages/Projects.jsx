@@ -33,7 +33,7 @@ const Projects = () => {
         return;
       }
       const url = filter ? `${API_BASE_URL}/projects?status=${filter}` : `${API_BASE_URL}/projects`;
-      
+
       const response = await axios.get(url, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -128,7 +128,7 @@ const Projects = () => {
     try {
       await axios.post(
         `${API_BASE_URL}/projects/${selectedProject._id}/payment-requests`,
-        { 
+        {
           amount: Number(requestAmount),
           description: requestDescription
         },
@@ -233,33 +233,29 @@ const Projects = () => {
         {/* Filter Tabs */}
         <div className="mb-6 flex gap-2 bg-white p-2 rounded-lg shadow">
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('pending')}
           >
             Pending ({stats.pending})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'confirmed' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'confirmed' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('confirmed')}
           >
             Approved ({stats.confirmed})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === 'rejected' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'rejected' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('rejected')}
           >
             Rejected ({stats.rejected})
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
-              filter === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
             onClick={() => setFilter('')}
           >
             All Projects ({stats.total})
@@ -289,9 +285,9 @@ const Projects = () => {
                         {project.status.toUpperCase()}
                       </span>
                     </div>
-                    
+
                     <p className="text-gray-600 mb-4">{project.description}</p>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
                         <span className="text-sm font-semibold text-gray-700">Company:</span>
@@ -305,19 +301,18 @@ const Projects = () => {
                         <span className="text-sm font-semibold text-gray-700">Email:</span>
                         <p className="text-gray-900">{project.client?.email}</p>
                       </div>
-                      
+
                     </div>
                     <div>
-                        <span className="text-sm font-semibold text-gray-700">Budget:</span>
-                        <p className="text-gray-900 font-semibold">₹{project.budget?.toLocaleString()}</p>
-                      </div>
+                      <span className="text-sm font-semibold text-gray-700">Budget:</span>
+                      <p className="text-gray-900 font-semibold">₹{project.budget?.toLocaleString()}</p>
+                    </div>
 
                     {project.adminComment && (
-                      <div className={`mt-4 p-4 rounded-lg ${
-                        project.status === 'confirmed' 
-                          ? 'bg-green-50 border-l-4 border-green-500' 
+                      <div className={`mt-4 p-4 rounded-lg ${project.status === 'confirmed'
+                          ? 'bg-green-50 border-l-4 border-green-500'
                           : 'bg-red-50 border-l-4 border-red-500'
-                      }`}>
+                        }`}>
                         <p className="font-semibold text-sm mb-1">
                           {project.status === 'confirmed' ? '💬 Admin Comment:' : '📋 Rejection Reason:'}
                         </p>
@@ -326,9 +321,9 @@ const Projects = () => {
                     )}
 
                     <div className="mt-3 text-sm text-gray-500">
-                      Submitted: {new Date(project.createdAt).toLocaleDateString('en-IN', { 
-                        year: 'numeric', 
-                        month: 'long', 
+                      Submitted: {new Date(project.createdAt).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'long',
                         day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit'
@@ -356,11 +351,11 @@ const Projects = () => {
 
                   {project.status === 'confirmed' && (
                     <div className="ml-4 flex flex-col gap-2">
-                       <button
+                      <button
                         onClick={() => openRequestModal(project)}
                         className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
                       >
-                         💳 Request Payment
+                        💳 Request Payment
                       </button>
                     </div>
                   )}
@@ -377,7 +372,7 @@ const Projects = () => {
               <h2 className="text-2xl font-bold mb-4">
                 {actionType === 'approve' ? '✅ Approve Project' : '❌ Reject Project'}
               </h2>
-              
+
               <div className="mb-4 p-4 bg-gray-50 rounded-lg">
                 <h3 className="text-lg font-semibold mb-2">{selectedProject.title}</h3>
                 <p className="text-gray-600 mb-2">{selectedProject.description}</p>
@@ -391,14 +386,14 @@ const Projects = () => {
 
               <div className="mb-4">
                 <label className="block font-semibold mb-2 text-gray-700">
-                  {actionType === 'approve' 
-                    ? 'Comment (optional):' 
+                  {actionType === 'approve'
+                    ? 'Comment (optional):'
                     : 'Rejection Reason (required):'}
                 </label>
                 <textarea
                   className="w-full border border-gray-300 rounded-lg p-3 h-24 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder={actionType === 'approve' 
-                    ? 'Add an optional comment...' 
+                  placeholder={actionType === 'approve'
+                    ? 'Add an optional comment...'
                     : 'Please provide a reason for rejection...'}
                   value={adminComment}
                   onChange={(e) => setAdminComment(e.target.value)}
@@ -437,7 +432,7 @@ const Projects = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-4">💳 Request Custom Payment</h2>
-              
+
               <div className="mb-4 p-4 bg-gray-50 rounded-lg">
                 <h3 className="text-lg font-semibold mb-2">Project: {selectedProject.title}</h3>
                 <p className="text-sm text-gray-500">

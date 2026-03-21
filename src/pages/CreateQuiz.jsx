@@ -106,11 +106,10 @@ const CreateQuiz = () => {
           <button
             onClick={handleCreateQuiz}
             disabled={loading || !title || !category || !description || !instructions || !time}
-            className={`w-full py-3 mt-4 text-lg font-semibold rounded-xl transition-all duration-300 ${
-              loading
+            className={`w-full py-3 mt-4 text-lg font-semibold rounded-xl transition-all duration-300 ${loading
                 ? "bg-blue-300 cursor-not-allowed text-white"
                 : "bg-blue-600 hover:bg-blue-700 text-white hover:scale-105 active:scale-95"
-            }`}
+              }`}
           >
             {loading ? "Creating..." : "Create Quiz"}
           </button>

@@ -13,7 +13,7 @@ const Quizes = () => {
         const response = await axios.get(
           "http://backteg-38ub.onrender.com/api/tests/getTests"
         );
-       
+
         setQuizzes(response.data);
       } catch (error) {
         console.error("Failed to fetch quizzes", error);
@@ -66,34 +66,34 @@ const Quizes = () => {
 
             <div className="flex flex-wrap gap-4">
               {groupedByCategory[category].map((quiz) => (
-               <div
-  key={quiz._id}
-  className="relative bg-white/70 dark:bg-gray-900 backdrop-blur-md border border-gray-200 dark:border-gray-700 w-full sm:w-[48%] md:w-[31%] p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
->
-  <div className="flex items-start justify-between mb-2">
-    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-      {quiz.title}
-    </h3>
-    <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded-full">
-      {quiz.time} min
-    </span>
-  </div>
+                <div
+                  key={quiz._id}
+                  className="relative bg-white/70 dark:bg-gray-900 backdrop-blur-md border border-gray-200 dark:border-gray-700 w-full sm:w-[48%] md:w-[31%] p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                      {quiz.title}
+                    </h3>
+                    <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 rounded-full">
+                      {quiz.time} min
+                    </span>
+                  </div>
 
-  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-3">
-    {quiz.description}
-  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-3">
+                    {quiz.description}
+                  </p>
 
-  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-    Category: <span className="font-medium">{quiz.category}</span>
-  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    Category: <span className="font-medium">{quiz.category}</span>
+                  </p>
 
-  <button
-    className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition"
-    onClick={() => navigate(`/getquestion/${quiz._id}`)}
-  >
-    Edit Quiz
-  </button>
-</div>
+                  <button
+                    className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition"
+                    onClick={() => navigate(`/getquestion/${quiz._id}`)}
+                  >
+                    Edit Quiz
+                  </button>
+                </div>
 
               ))}
             </div>

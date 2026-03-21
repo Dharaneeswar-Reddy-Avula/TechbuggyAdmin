@@ -105,7 +105,7 @@ const Addquestion = () => {
           body: JSON.stringify({ quizId, questions: finalQuestions }),
         }
       );
-     
+
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -146,9 +146,8 @@ const Addquestion = () => {
                   className="flex-grow p-3 rounded-lg border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
                 <button
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    isCorrect ? "bg-green-600 text-white" : "bg-gray-300 text-gray-800"
-                  }`}
+                  className={`px-3 py-1 rounded-full text-sm font-semibold ${isCorrect ? "bg-green-600 text-white" : "bg-gray-300 text-gray-800"
+                    }`}
                   onClick={() => handleCorrectAnswerChange(option)}
                 >
                   {isCorrect ? "Correct" : "Mark"}
@@ -214,11 +213,10 @@ const Addquestion = () => {
                     {q.options.map((opt, i) => (
                       <li
                         key={i}
-                        className={`${
-                          opt === q.correctAnswer
+                        className={`${opt === q.correctAnswer
                             ? "text-green-600 dark:text-green-400 font-medium"
                             : "text-gray-700 dark:text-gray-300"
-                        }`}
+                          }`}
                       >
                         {opt}
                       </li>

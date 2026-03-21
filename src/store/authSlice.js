@@ -44,18 +44,18 @@ export const verifyOtp = createAsyncThunk(
 // Request OTP for registration
 export const requestAdminOtp = createAsyncThunk(
   "auth/requestAdminOtp",
-  async ({ email }, { rejectWithValue,getState }) => {
+  async ({ email }, { rejectWithValue, getState }) => {
     try {
       const token = getState().auth.token;
       await axios.post(
         "https://backteg-38ub.onrender.com/api/admin/register/request-otp",
         {
           email,
-        },{
-          headers:{
-            Authorization:`Bearer ${token}`,
-          }
+        }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         }
+      }
       );
       toast.success("OTP sent to the requested email for verification.");
     } catch (err) {
@@ -104,7 +104,7 @@ export const mailToNewAdmin = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message ||
-          "Error in sending mail to newly registered admin."
+        "Error in sending mail to newly registered admin."
       );
     }
   }
@@ -173,7 +173,7 @@ const authSlice = createSlice({
       .addCase(adminLogin.pending, (state) => {
         state.loginLoading = true;
         state.loginError = null;
-        
+
       })
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.loginLoading = false;

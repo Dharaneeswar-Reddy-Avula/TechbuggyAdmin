@@ -232,10 +232,10 @@ const Subscription = () => {
 
       {/* ✅ Show loading */}
       {loading ? (
-<div className="flex flex-col items-center justify-center gap-4 py-8">
-        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-        <p className="text-blue-600 text-sm font-medium animate-pulse">Loading Subscriptions, please wait...</p>
-      </div>      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 py-8">
+          <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+          <p className="text-blue-600 text-sm font-medium animate-pulse">Loading Subscriptions, please wait...</p>
+        </div>) : (
         <div className="flex flex-wrap gap-6">
           {subscriptions.map((plan) => (
             <SubscriptionCard
