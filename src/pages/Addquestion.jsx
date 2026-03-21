@@ -65,7 +65,7 @@ const Addquestion = () => {
   const handleDelete = async (questionIndex) => {
     try {
       await axios.put(
-        `http://localhost:8009/api/tests/deletequestion/${quizId}?deleteIndex=${questionIndex}`
+        `http://backteg-38ub.onrender.com/api/tests/deletequestion/${quizId}?deleteIndex=${questionIndex}`
       );
     } catch (error) {
       console.warn("Backend delete failed (ignored for local delete):", error.message);
@@ -98,7 +98,7 @@ const Addquestion = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8009/api/tests/addquestion/${quizId}`,
+        `http://backteg-38ub.onrender.com/api/tests/addquestion/${quizId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

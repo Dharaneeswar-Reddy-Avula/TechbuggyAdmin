@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:8009/api";
+const API_URL = "http://backteg-38ub.onrender.com/api";
 
 const Complaints = () => {
   const [users, setUsers] = useState([]);

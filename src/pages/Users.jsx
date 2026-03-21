@@ -7,10 +7,10 @@
 // import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 // import { IoCloseSharp } from "react-icons/io5";
-// // const API_URL = "http://localhost:8009/api";
+// // const API_URL = "http://backteg-38ub.onrender.com/api";
 // import { AiOutlineEye } from "react-icons/ai";
 
-// const API_URL = "http://localhost:8009/api";
+// const API_URL = "http://backteg-38ub.onrender.com/api";
 
 // const Users = () => {
 //   const [users, setUsers] = useState([]);
@@ -467,7 +467,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlineEye } from "react-icons/ai";
 
-const API_URL = "http://localhost:8009/api";
+const API_URL = "http://backteg-38ub.onrender.com/api";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
