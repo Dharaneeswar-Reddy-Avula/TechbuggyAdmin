@@ -20,14 +20,14 @@ export const adminLogin = createAsyncThunk(
 );
 
 //verify otp
-// http://backteg-38ub.onrender.com
+// https://backteg-38ub.onrender.com
 export const verifyOtp = createAsyncThunk(
   "auth/verifyotp",
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://backteg-38ub.onrender.com/api/admin/verifyOtp",
-        { email, otp },
+        { email, otp }
       );
       toast.success("Login Successful!");
 

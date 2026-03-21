@@ -11,7 +11,7 @@ const Quizes = () => {
     const fetchQuizzes = async () => {
       try {
         const response = await axios.get(
-          "http://backteg-38ub.onrender.com/api/tests/getTests"
+          "https://backteg-38ub.onrender.com/api/tests/getTests"
         );
 
         setQuizzes(response.data);

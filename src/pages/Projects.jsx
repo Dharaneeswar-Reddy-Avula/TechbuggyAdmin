@@ -17,7 +17,7 @@ const Projects = () => {
   const [requestAmount, setRequestAmount] = useState('');
   const [requestDescription, setRequestDescription] = useState('');
 
-  const API_BASE_URL = 'http://backteg-38ub.onrender.com/api/admin';
+  const API_BASE_URL = 'https://backteg-38ub.onrender.com/api/admin';
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
@@ -310,8 +310,8 @@ const Projects = () => {
 
                     {project.adminComment && (
                       <div className={`mt-4 p-4 rounded-lg ${project.status === 'confirmed'
-                          ? 'bg-green-50 border-l-4 border-green-500'
-                          : 'bg-red-50 border-l-4 border-red-500'
+                        ? 'bg-green-50 border-l-4 border-green-500'
+                        : 'bg-red-50 border-l-4 border-red-500'
                         }`}>
                         <p className="font-semibold text-sm mb-1">
                           {project.status === 'confirmed' ? '💬 Admin Comment:' : '📋 Rejection Reason:'}
