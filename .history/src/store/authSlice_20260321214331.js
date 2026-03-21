@@ -10,7 +10,7 @@ export const adminLogin = createAsyncThunk(
       await axios.post("https://backteg-38ub.onrender.com/api/admin/login", {
         email,
         password,
-      }, { withCredentials: true }   { withCredentials: true }  );
+      });
       toast.success("OTP sent Successfully!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -20,14 +20,14 @@ export const adminLogin = createAsyncThunk(
 );
 
 //verify otp
-// https://backteg-38ub.onrender.com
+// http://backteg-38ub.onrender.com
 export const verifyOtp = createAsyncThunk(
   "auth/verifyotp",
   async ({ email, otp }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://backteg-38ub.onrender.com/api/admin/verifyOtp",
-        { email, otp }
+        { email, otp },
       );
       toast.success("Login Successful!");
 
@@ -44,18 +44,18 @@ export const verifyOtp = createAsyncThunk(
 // Request OTP for registration
 export const requestAdminOtp = createAsyncThunk(
   "auth/requestAdminOtp",
-  async ({ email }, { rejectWithValue, getState }) => {
+  async ({ email }, { rejectWithValue,getState }) => {
     try {
       const token = getState().auth.token;
       await axios.post(
         "https://backteg-38ub.onrender.com/api/admin/register/request-otp",
         {
           email,
-        }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+        },{
+          headers:{
+            Authorization:`Bearer ${token}`,
+          }
         }
-      }
       );
       toast.success("OTP sent to the requested email for verification.");
     } catch (err) {
@@ -104,7 +104,7 @@ export const mailToNewAdmin = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message ||
-        "Error in sending mail to newly registered admin."
+          "Error in sending mail to newly registered admin."
       );
     }
   }
@@ -173,7 +173,7 @@ const authSlice = createSlice({
       .addCase(adminLogin.pending, (state) => {
         state.loginLoading = true;
         state.loginError = null;
-
+        
       })
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.loginLoading = false;
