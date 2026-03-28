@@ -48,21 +48,19 @@ const AdminLogin = () => {
   };
 
   const handleSubmit = async (e) => {
-    setSendLoading(true);
-    e.preventDefault();
-    dispatch(adminLogin({ email, password }))
-      .unwrap()
-      .then(() => setOtpModal(true))
-      .catch(() => {});
-    setSendLoading(false);
-  };
+  e.preventDefault();
+
+  try {
+    await dispatch(adminLogin({ email, password })).unwrap();
+    setOtpModal(true);
+  } catch (err) {
+    // error already handled
+  }
+};
 
   const handleVerifyOtp = async (otp) => {
     dispatch(verifyOtp({ email, otp }))
       .unwrap()
-      .then(() => {
-        setOtpModal(false);
-      })
       .then(() => {
         toast.success("OTP Verified Successfully!");
         setOtpModal(false);
@@ -185,7 +183,7 @@ const AdminLogin = () => {
                   onClick={handleSubmit}
                   className="text-blue-500 dark:text-blue-400 hover:underline"
                 >
-                  {sendLoading ? (
+                  {loginLoading ? (
                     <span className="flex items-center justify-center">
                       <FaSpinner className="animate-spin" size={15} />
                       Sending...

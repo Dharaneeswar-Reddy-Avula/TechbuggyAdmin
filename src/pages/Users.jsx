@@ -606,9 +606,10 @@ const Users = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto md:px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-end mt-[-80px]">
-        <div className="relative w-full sm:w-64 mb-3">
+    <div className="max-w-6xl mx-auto md:px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">User Management</h1>
+        <div className="relative w-full sm:w-64">
           <input
             type="text"
             value={search}
@@ -620,10 +621,7 @@ const Users = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800  rounded-xl shadow-md overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">User Management</h2>
-        </div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
 
         {loading && showSpinner && (
           <div className="flex flex-col items-center justify-center gap-4 py-8">

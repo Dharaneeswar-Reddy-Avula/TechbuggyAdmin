@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiRefreshCw, FiEye, FiCheck, FiX } from 'react-icons/fi';
+import { FiRefreshCw, FiEye, FiCheck, FiX, FiCheckCircle, FiXCircle, FiClock, FiCreditCard, FiMessageSquare, FiFileText } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
 const Projects = () => {
@@ -21,8 +21,18 @@ const Projects = () => {
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
+    if (projects.length > 0) {
+      if (filter) {
+        setFilteredProjects(projects.filter(p => p.status === filter));
+      } else {
+        setFilteredProjects(projects);
+      }
+    }
+  }, [filter, projects]);
+
+  useEffect(() => {
     fetchProjects();
-  }, [filter, token]);
+  }, [token]);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -32,7 +42,7 @@ const Projects = () => {
         setLoading(false);
         return;
       }
-      const url = filter ? `${API_BASE_URL}/projects?status=${filter}` : `${API_BASE_URL}/projects`;
+      const url = `${API_BASE_URL}/projects`;
 
       const response = await axios.get(url, {
         headers: {
@@ -41,7 +51,11 @@ const Projects = () => {
       });
 
       setProjects(response.data.projects);
-      setFilteredProjects(response.data.projects);
+      if (filter) {
+        setFilteredProjects(response.data.projects.filter(p => p.status === filter));
+      } else {
+        setFilteredProjects(response.data.projects);
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
       toast.error(error.response?.data?.message || 'Failed to fetch projects');
@@ -183,9 +197,9 @@ const Projects = () => {
   };
 
   const getStatusIcon = (status) => {
-    if (status === 'confirmed') return '✅';
-    if (status === 'rejected') return '❌';
-    return '⏳';
+    if (status === 'confirmed') return <FiCheckCircle className="text-green-500" />;
+    if (status === 'rejected') return <FiXCircle className="text-red-500" />;
+    return <FiClock className="text-yellow-500" />;
   };
 
   const stats = {
@@ -196,14 +210,14 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 transition-colors">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Project Management</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Project Approvals</h1>
           <button
             onClick={fetchProjects}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full sm:w-auto justify-center"
           >
             <FiRefreshCw className={loading ? 'animate-spin' : ''} />
             Refresh
@@ -211,27 +225,27 @@ const Projects = () => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-blue-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Total Projects</h3>
-            <p className="text-3xl font-bold text-blue-600">{stats.total}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-blue-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Total Projects</h3>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-yellow-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Pending Review</h3>
-            <p className="text-3xl font-bold text-yellow-600">{stats.pending}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-yellow-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Pending Review</h3>
+            <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{stats.pending}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-green-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Approved</h3>
-            <p className="text-3xl font-bold text-green-600">{stats.confirmed}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-green-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Approved</h3>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.confirmed}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-red-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Rejected</h3>
-            <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-red-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Rejected</h3>
+            <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.rejected}</p>
           </div>
         </div>
 
         {/* Filter Tabs */}
-        <div className="mb-6 flex gap-2 bg-white p-2 rounded-lg shadow">
+        <div className="mb-6 flex gap-2 bg-white dark:bg-gray-800 p-2 rounded-lg shadow overflow-x-auto whitespace-nowrap hide-scrollbar">
           <button
             className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
               }`}
@@ -266,61 +280,63 @@ const Projects = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Loading projects...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Loading projects...</p>
           </div>
         ) : filteredProjects.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <p className="text-gray-500 text-lg">No projects found</p>
+          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">No projects found</p>
           </div>
         ) : (
           <div className="grid gap-4">
             {filteredProjects.map((project) => (
-              <div key={project._id} className="bg-white shadow-lg rounded-lg p-6 border-l-4 border-indigo-500 hover:shadow-xl transition-shadow">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-2xl">{getStatusIcon(project.status)}</span>
-                      <h3 className="text-xl font-semibold text-gray-800">{project.title}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(project.status)}`}>
+              <div key={project._id} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 border-l-4 border-indigo-500 hover:shadow-xl transition-shadow">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                  <div className="flex-1 w-full">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{getStatusIcon(project.status)}</span>
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{project.title}</h3>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border inline-block ${getStatusBadge(project.status)}`}>
                         {project.status.toUpperCase()}
                       </span>
                     </div>
 
-                    <p className="text-gray-600 mb-4">{project.description}</p>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
-                        <span className="text-sm font-semibold text-gray-700">Company:</span>
-                        <p className="text-gray-900">{project.client?.companyName}</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Company:</span>
+                        <p className="text-gray-900 dark:text-gray-200">{project.client?.companyName}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-gray-700">Contact:</span>
-                        <p className="text-gray-900">{project.client?.userName}</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Contact:</span>
+                        <p className="text-gray-900 dark:text-gray-200">{project.client?.userName}</p>
                       </div>
                       <div className=''>
-                        <span className="text-sm font-semibold text-gray-700">Email:</span>
-                        <p className="text-gray-900">{project.client?.email}</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Email:</span>
+                        <p className="text-gray-900 dark:text-gray-200">{project.client?.email}</p>
                       </div>
 
                     </div>
                     <div>
-                      <span className="text-sm font-semibold text-gray-700">Budget:</span>
-                      <p className="text-gray-900 font-semibold">₹{project.budget?.toLocaleString()}</p>
+                      <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Budget:</span>
+                      <p className="text-gray-900 dark:text-gray-200 font-semibold">₹{project.budget?.toLocaleString()}</p>
                     </div>
 
                     {project.adminComment && (
                       <div className={`mt-4 p-4 rounded-lg ${project.status === 'confirmed'
-                        ? 'bg-green-50 border-l-4 border-green-500'
-                        : 'bg-red-50 border-l-4 border-red-500'
+                        ? 'bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500'
+                        : 'bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500'
                         }`}>
-                        <p className="font-semibold text-sm mb-1">
-                          {project.status === 'confirmed' ? '💬 Admin Comment:' : '📋 Rejection Reason:'}
+                        <p className="font-semibold text-sm mb-1 dark:text-gray-200 flex items-center gap-2">
+                          {project.status === 'confirmed' ? <><FiMessageSquare /> Admin Comment:</> : <><FiFileText /> Rejection Reason:</>}
                         </p>
-                        <p className="text-gray-700">{project.adminComment}</p>
+                        <p className="text-gray-700 dark:text-gray-300">{project.adminComment}</p>
                       </div>
                     )}
 
-                    <div className="mt-3 text-sm text-gray-500">
+                    <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
                       Submitted: {new Date(project.createdAt).toLocaleDateString('en-IN', {
                         year: 'numeric',
                         month: 'long',
@@ -355,7 +371,7 @@ const Projects = () => {
                         onClick={() => openRequestModal(project)}
                         className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
                       >
-                        💳 Request Payment
+                        <FiCreditCard /> Request Payment
                       </button>
                     </div>
                   )}
@@ -368,30 +384,30 @@ const Projects = () => {
         {/* Review Modal */}
         {showModal && selectedProject && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">
-                {actionType === 'approve' ? '✅ Approve Project' : '❌ Reject Project'}
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4 dark:text-white flex items-center gap-2">
+                {actionType === 'approve' ? <><FiCheckCircle className="text-green-500" /> Approve Project</> : <><FiXCircle className="text-red-500" /> Reject Project</>}
               </h2>
 
-              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                <h3 className="text-lg font-semibold mb-2">{selectedProject.title}</h3>
-                <p className="text-gray-600 mb-2">{selectedProject.description}</p>
-                <p className="text-sm text-gray-500">
+              <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2 dark:text-white">{selectedProject.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-2">{selectedProject.description}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   <span className="font-semibold">Company:</span> {selectedProject.client?.companyName}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   <span className="font-semibold">Budget:</span> ₹{selectedProject.budget?.toLocaleString()}
                 </p>
               </div>
 
               <div className="mb-4">
-                <label className="block font-semibold mb-2 text-gray-700">
+                <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-200">
                   {actionType === 'approve'
                     ? 'Comment (optional):'
                     : 'Rejection Reason (required):'}
                 </label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-lg p-3 h-24 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg p-3 h-24 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   placeholder={actionType === 'approve'
                     ? 'Add an optional comment...'
                     : 'Please provide a reason for rejection...'}
@@ -400,7 +416,7 @@ const Projects = () => {
                 />
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 mt-4">
                 {actionType === 'approve' ? (
                   <button
                     className="flex-1 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 font-semibold transition-colors"
@@ -417,7 +433,7 @@ const Projects = () => {
                   </button>
                 )}
                 <button
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-400 font-semibold transition-colors"
+                  className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 font-semibold transition-colors"
                   onClick={closeModal}
                 >
                   Cancel
@@ -430,22 +446,22 @@ const Projects = () => {
         {/* Request Payment Modal */}
         {showRequestModal && selectedProject && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">💳 Request Custom Payment</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4 dark:text-white flex items-center gap-2"><FiCreditCard className="text-blue-500" /> Request Custom Payment</h2>
 
-              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                <h3 className="text-lg font-semibold mb-2">Project: {selectedProject.title}</h3>
-                <p className="text-sm text-gray-500">
+              <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2 dark:text-white">Project: {selectedProject.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-300">
                   <span className="font-semibold">Client:</span> {selectedProject.client?.companyName} ({selectedProject.client?.userName})
                 </p>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Amount (₹)</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Amount (₹)</label>
                 <input
                   type="number"
                   min="1"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   placeholder="e.g. 5000"
                   value={requestAmount}
                   onChange={(e) => setRequestAmount(e.target.value)}
@@ -453,10 +469,10 @@ const Projects = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Description / Reason</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Description / Reason</label>
                 <input
                   type="text"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   placeholder="e.g. Extra server setup fee"
                   value={requestDescription}
                   onChange={(e) => setRequestDescription(e.target.value)}
@@ -471,7 +487,7 @@ const Projects = () => {
                   Create Request
                 </button>
                 <button
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-400 font-semibold transition-colors"
+                  className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 font-semibold transition-colors"
                   onClick={() => setShowRequestModal(false)}
                 >
                   Cancel
