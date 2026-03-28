@@ -5,11 +5,11 @@ import axios from 'axios';
 // Card Component
 const Card = ({ title, number, subText, percentage }) => {
   return (
-    <div className="shadow-md bg-white rounded-lg p-4 flex flex-col justify-center items-center text-center w-full">
-      <h3 className="text-blue-500 text-lg font-medium">{title}</h3>
-      <p className="text-2xl font-bold text-blue-600">{number}</p>
-      <p className="text-gray-500 mt-2">{subText}</p>
-      <p className={`text-sm ${percentage > 0 ? 'text-green-500' : 'text-red-500'}`}>
+    <div className="shadow-md bg-white dark:bg-gray-800 rounded-lg p-4 flex flex-col justify-center items-center text-center w-full">
+      <h3 className="text-blue-500 dark:text-blue-400 text-lg font-medium">{title}</h3>
+      <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">{number}</p>
+      <p className="text-gray-500 dark:text-gray-400 mt-2">{subText}</p>
+      <p className={`text-sm ${percentage > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
         {percentage}% {percentage > 0 ? '↑' : '↓'}
       </p>
     </div>
@@ -61,7 +61,7 @@ const Dashboard = () => {
   }, [timeframe]);
 
   return (
-    <div className="flex flex-col gap-6 p-4 lg:p-6 lg:w-full">
+    <div className="flex flex-col gap-6 p-4 lg:p-6 lg:w-full min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {loading && <p className="text-center">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
       {!loading && !error && (
@@ -77,11 +77,11 @@ const Dashboard = () => {
               />
             ))}
           </div>
-          <div className="bg-white shadow-lg rounded-lg p-4 lg:p-6">
+          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 lg:p-6">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-              <h2 className="text-xl font-bold">Test Progress Overview</h2>
+              <h2 className="text-xl font-bold dark:text-white">Test Progress Overview</h2>
               <select
-                className="border border-gray-300 rounded-md p-2"
+                className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2"
                 value={timeframe}
                 onChange={(e) => setTimeframe(e.target.value)}
               >
