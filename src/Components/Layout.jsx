@@ -159,7 +159,7 @@ const Layout = () => {
             <div className="flex flex-row gap-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#2664eb] flex justify-center items-center px-2 py-1 gap-2 text-white rounded-md"
+              className="bg-[#2664eb] flex justify-center items-center px-2 py-1 md:px-3 md:py-2 gap-1 md:gap-2 text-white rounded-md text-xs sm:text-sm whitespace-nowrap"
             >
               <FaPlus />
               ADD ADMIN

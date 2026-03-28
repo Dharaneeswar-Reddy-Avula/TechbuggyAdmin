@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiRefreshCw, FiCheck, FiX } from 'react-icons/fi';
+import { FiRefreshCw, FiCheck, FiX, FiCheckCircle, FiXCircle, FiClock, FiFileText } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
 const Payments = () => {
@@ -18,8 +18,18 @@ const Payments = () => {
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
+    if (payments.length > 0) {
+      if (filter) {
+        setFilteredPayments(payments.filter(p => p.status === filter));
+      } else {
+        setFilteredPayments(payments);
+      }
+    }
+  }, [filter, payments]);
+
+  useEffect(() => {
     fetchPayments();
-  }, [filter, token]);
+  }, [token]);
 
   const fetchPayments = async () => {
     setLoading(true);
@@ -29,7 +39,7 @@ const Payments = () => {
         setLoading(false);
         return;
       }
-      const url = filter ? `${API_BASE_URL}/payments?status=${filter}` : `${API_BASE_URL}/payments`;
+      const url = `${API_BASE_URL}/payments`;
 
       const response = await axios.get(url, {
         headers: {
@@ -38,7 +48,11 @@ const Payments = () => {
       });
 
       setPayments(response.data.payments);
-      setFilteredPayments(response.data.payments);
+      if (filter) {
+        setFilteredPayments(response.data.payments.filter(p => p.status === filter));
+      } else {
+        setFilteredPayments(response.data.payments);
+      }
     } catch (error) {
       console.error('Error fetching payments:', error);
       toast.error(error.response?.data?.message || 'Failed to fetch payments');
@@ -131,9 +145,9 @@ const Payments = () => {
   };
 
   const getStatusIcon = (status) => {
-    if (status === 'confirmed') return '✅';
-    if (status === 'rejected') return '❌';
-    return '⏳';
+    if (status === 'confirmed') return <FiCheckCircle className="text-green-500" />;
+    if (status === 'rejected') return <FiXCircle className="text-red-500" />;
+    return <FiClock className="text-yellow-500" />;
   };
 
   const stats = {
@@ -144,14 +158,14 @@ const Payments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 transition-colors">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Payment Verifications</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Payment Verifications</h1>
           <button
             onClick={fetchPayments}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full sm:w-auto justify-center"
           >
             <FiRefreshCw className={loading ? 'animate-spin' : ''} />
             Refresh
@@ -159,27 +173,27 @@ const Payments = () => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-blue-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Total Submissions</h3>
-            <p className="text-3xl font-bold text-blue-600">{stats.total}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-blue-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Total Submissions</h3>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-yellow-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Pending Verification</h3>
-            <p className="text-3xl font-bold text-yellow-600">{stats.pending}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-yellow-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Pending Verification</h3>
+            <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{stats.pending}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-green-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Confirmed</h3>
-            <p className="text-3xl font-bold text-green-600">{stats.confirmed}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-green-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Confirmed</h3>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.confirmed}</p>
           </div>
-          <div className="bg-white shadow rounded-lg p-6 border-l-4 border-red-500">
-            <h3 className="text-gray-500 text-sm font-semibold">Rejected</h3>
-            <p className="text-3xl font-bold text-red-600">{stats.rejected}</p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border-l-4 border-red-500">
+            <h3 className="text-gray-500 dark:text-gray-400 text-sm font-semibold">Rejected</h3>
+            <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.rejected}</p>
           </div>
         </div>
 
         {/* Filter Tabs */}
-        <div className="mb-6 flex gap-2 bg-white p-2 rounded-lg shadow">
+        <div className="mb-6 flex gap-2 bg-white dark:bg-gray-800 p-2 rounded-lg shadow overflow-x-auto whitespace-nowrap hide-scrollbar">
           <button
             className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${filter === 'pending' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'
               }`}
@@ -214,51 +228,53 @@ const Payments = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Loading payments...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Loading payments...</p>
           </div>
         ) : filteredPayments.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <p className="text-gray-500 text-lg">No payment submissions found</p>
+          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">No payment submissions found</p>
           </div>
         ) : (
           <div className="grid gap-4">
             {filteredPayments.map((payment) => (
-              <div key={payment._id} className="bg-white shadow-lg rounded-lg p-6 border-l-4 border-indigo-500 hover:shadow-xl transition-shadow">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-2xl">{getStatusIcon(payment.status)}</span>
-                      <h3 className="text-xl font-semibold text-gray-800">Payment for: {payment.project?.title || 'Unknown Project'}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(payment.status)}`}>
+              <div key={payment._id} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 border-l-4 border-indigo-500 hover:shadow-xl transition-shadow">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                  <div className="flex-1 w-full">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{getStatusIcon(payment.status)}</span>
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Payment for: {payment.project?.title || 'Unknown Project'}</h3>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border inline-block ${getStatusBadge(payment.status)}`}>
                         {payment.status.toUpperCase()}
                       </span>
                     </div>
 
-                    <p className="text-indigo-600 font-bold text-lg mb-4">Amount: ₹{payment.amount?.toLocaleString()} (Phase {payment.phase})</p>
+                    <p className="text-indigo-600 dark:text-indigo-400 font-bold text-lg mb-4">Amount: ₹{payment.amount?.toLocaleString()} (Phase {payment.phase})</p>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
-                        <span className="text-sm font-semibold text-gray-700">Client Info:</span>
-                        <p className="text-gray-900">{payment.client?.companyName} ({payment.client?.userName})</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Client Info:</span>
+                        <p className="text-gray-900 dark:text-gray-200">{payment.client?.companyName} ({payment.client?.userName})</p>
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-gray-700">Method:</span>
-                        <p className="text-gray-900 font-medium">{payment.paymentMethod}</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">Method:</span>
+                        <p className="text-gray-900 dark:text-gray-200 font-medium">{payment.paymentMethod}</p>
                       </div>
                       <div className='col-span-2'>
-                        <span className="text-sm font-semibold text-gray-700">UTR / Transaction No:</span>
-                        <p className="text-gray-900 font-mono bg-gray-100 px-2 py-1 inline-block rounded border border-gray-200">{payment.utrNumber}</p>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-400">UTR / Transaction No:</span>
+                        <p className="text-gray-900 dark:text-gray-200 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 inline-block rounded border border-gray-200 dark:border-gray-600">{payment.utrNumber}</p>
                       </div>
                     </div>
 
                     {payment.adminComment && (
-                      <div className={`mt-4 p-4 rounded-lg bg-red-50 border-l-4 border-red-500`}>
-                        <p className="font-semibold text-sm mb-1">📋 Rejection Reason:</p>
-                        <p className="text-gray-700">{payment.adminComment}</p>
+                      <div className={`mt-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500`}>
+                        <p className="font-semibold text-sm mb-1 dark:text-gray-200 flex items-center gap-2"><FiFileText /> Rejection Reason:</p>
+                        <p className="text-gray-700 dark:text-gray-300">{payment.adminComment}</p>
                       </div>
                     )}
 
-                    <div className="mt-3 text-sm text-gray-500">
+                    <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
                       Submitted: {new Date(payment.createdAt).toLocaleDateString('en-IN', {
                         year: 'numeric',
                         month: 'long',
@@ -271,7 +287,7 @@ const Payments = () => {
 
                   {/* Action Buttons (only for pending payments) */}
                   {payment.status === 'pending' && (
-                    <div className="ml-4 flex flex-col gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 w-full sm:w-auto">
                       <button
                         onClick={() => openModal(payment, 'confirm')}
                         className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors shadow-sm"
@@ -295,36 +311,36 @@ const Payments = () => {
         {/* Review Modal */}
         {showModal && selectedPayment && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">
-                {actionType === 'confirm' ? '✅ Confirm Payment' : '❌ Reject Payment'}
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4 dark:text-white flex items-center gap-2">
+                {actionType === 'confirm' ? <><FiCheckCircle className="text-green-500"/> Confirm Payment</> : <><FiXCircle className="text-red-500"/> Reject Payment</>}
               </h2>
 
-              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-                <h3 className="text-lg font-semibold mb-2">Project: {selectedPayment.project?.title}</h3>
-                <p className="text-gray-600 mb-2">Phase: <span className="font-semibold">{selectedPayment.phase}</span></p>
-                <p className="text-indigo-600 text-xl font-bold mb-2">Amount: ₹{selectedPayment.amount?.toLocaleString()}</p>
-                <p className="text-sm text-gray-500 mb-1">
+              <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2 dark:text-white">Project: {selectedPayment.project?.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-2">Phase: <span className="font-semibold">{selectedPayment.phase}</span></p>
+                <p className="text-indigo-600 dark:text-indigo-400 text-xl font-bold mb-2">Amount: ₹{selectedPayment.amount?.toLocaleString()}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                   <span className="font-semibold">Client:</span> {selectedPayment.client?.userName} ({selectedPayment.client?.companyName})
                 </p>
-                <p className="text-sm text-gray-500">
-                  <span className="font-semibold">UTR / Trans No:</span> <span className="font-mono bg-white px-1 border rounded">{selectedPayment.utrNumber}</span>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">UTR / Trans No:</span> <span className="font-mono bg-white dark:bg-gray-600 dark:text-white px-1 border dark:border-gray-500 rounded">{selectedPayment.utrNumber}</span>
                 </p>
               </div>
 
               {actionType === 'confirm' && (
-                <div className="mb-4 p-3 bg-blue-50 text-blue-800 rounded border border-blue-200 text-sm">
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded border border-blue-200 dark:border-blue-800 text-sm">
                   Confirming this payment will mark the project phase as fully paid and automatically send an email receipt to the client. Ensure the UTR has been verified in your bank statement.
                 </div>
               )}
 
               {actionType === 'reject' && (
                 <div className="mb-4">
-                  <label className="block font-semibold mb-2 text-gray-700">
+                  <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-200">
                     Rejection Reason (required - will be emailed to client):
                   </label>
                   <textarea
-                    className="w-full border border-gray-300 rounded-lg p-3 h-24 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg p-3 h-24 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="e.g., UTR not found in bank statement, amount mismatch..."
                     value={adminComment}
                     onChange={(e) => setAdminComment(e.target.value)}
@@ -350,7 +366,7 @@ const Payments = () => {
                   </button>
                 )}
                 <button
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-400 font-semibold transition-colors"
+                  className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 font-semibold transition-colors"
                   onClick={closeModal}
                 >
                   Cancel
